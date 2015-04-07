@@ -1,5 +1,0 @@
-name: Dmytro
-syrname: Ytro
-login: dmytro1001
-password: dmytro0110
-secret word: TES
