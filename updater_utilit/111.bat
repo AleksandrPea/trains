@@ -1,0 +1,1 @@
+java -Dfile.encoding=UTF-8 -jar updater-1.0-SNAPSHOT-jar-with-dependencies.jar C:\\

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 18.03.2015 1:22:07 by Hibernate Tools 3.4.0.CR1 -->
+<hibernate-mapping>
+    <class name="orm.WayPoint" table="waypoint_temp" catalog="timetable">
+        <id name="wayPointId" type="java.lang.Integer">
+            <column name="WayPoint_id" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="route" class="orm.Route" fetch="select">
+            <column name="Route_id" not-null="true" />
+        </many-to-one>
+        <many-to-one name="station" class="orm.Station" fetch="select">
+            <column name="Station_id" not-null="true" />
+        </many-to-one>
+        <property name="arrival" type="string">
+            <column name="arrival" length="45" not-null="true" />
+        </property>
+        <property name="despatch" type="string">
+            <column name="despatch" length="45" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

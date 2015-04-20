@@ -1,18 +1,10 @@
 package Test;
 
-import java.util.ArrayList;
+import ORMroad.Database;
+import ORMroad.Station;
+
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
-
-import org.hibernate.proxy.HibernateProxy;
-
-import ORMroad.Database;
-import ORMroad.HibernateUtil;
-import ORMroad.Route;
-import ORMroad.WayPoint;
-import Parser.Parser;
-import ORMroad.Station;
 
 public class DataBaseTest {
 	public static void main(String[] args) {

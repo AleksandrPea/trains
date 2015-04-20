@@ -27,6 +27,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="1111" target="1.5" />
+      <module name="update" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

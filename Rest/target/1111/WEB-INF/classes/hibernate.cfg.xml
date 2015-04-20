@@ -4,9 +4,7 @@
 <hibernate-configuration>
  <session-factory >
   <property name="connection.datasource">jdbs/RoadSourse</property>
-  <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
   <property name="hibernate.current_session_context_class">thread</property>
-  
   <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
   <mapping resource="ORMroad/Route.hbm.xml"/>
   <mapping resource="ORMroad/Station.hbm.xml"/>

@@ -1,27 +1,22 @@
 package ORMroad;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.proxy.HibernateProxy;
+
+import java.util.*;
 
 public class Database {
-	public static Long save(Object obj) {
+	public static Integer save(Object obj) {
 		Session ses = HibernateUtil.getSessionFactory().openSession();
 		ses.beginTransaction();
-		Long id = (Long) ses.save(obj);
+		Integer id = (Integer) ses.save(obj);
 		ses.getTransaction().commit();
 		ses.close();
 		return id;
 	}
-	
+
 	public static void saveDataBase(ArrayList<Station> stations, ArrayList<Route> routes,
 			ArrayList<WayPoint> waypoints) {
 		deleteDataBase();
