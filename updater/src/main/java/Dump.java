@@ -14,6 +14,7 @@ import java.util.Locale;
  */
 public class Dump {
     public static void makeDump(String path) throws IOException, InterruptedException {
+        System.out.println(path);
         Locale local = new Locale("ru","RU");
         Date date = new Date();
         DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT, local);
@@ -27,7 +28,7 @@ public class Dump {
 
     public static void parse() {
         Parser p = new Parser();
-        p.parse("?????");
+        p.parse("Че");
         Database.saveDataBase(p.getStations(), p.getRoutes(), p.getWayPoints());
     }
 

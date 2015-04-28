@@ -12,7 +12,7 @@ public class DataBaseTest {
 		//System.out.println(route.getArrival());
 		//route = Database.initializeWayPoint(route);
 		//System.out.println(route.getRoute().getTravelTime());
-		List list = Database.getStation("Чернігів");
+        List list = Database.getStation("Чернігів");
 		Iterator it = list.iterator();
 		while(it.hasNext()) {
 			Station station = (Station) it.next();
