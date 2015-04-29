@@ -1,5 +1,6 @@
 package users.mysql;
 
+import ORMroad.Database;
 import ORMroad.Station;
 import users.dao.AbstractJDBCDao;
 import users.dao.PersistException;
@@ -31,26 +32,17 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     @Override
     public Carrier persist(Carrier obj) throws PersistException {
-        System.out.println(obj.getStations());
         Carrier persistedObj = super.persist(obj);
         persistedObj.setStations(obj.getStations());
-        String sql = "INSERT INTO timetable.Station_list (Carrier_id, Station_id) \n" +
-                "VALUES ('" + persistedObj.getId() + "', ?);";
-        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
-            List<Station> stations = persistedObj.getStations();
-            for (Station st: stations) {
-                stm.setInt(1, st.getStationId());
-                stm.execute();
-            }
-        } catch (Exception e) {
-            throw new PersistException(e);
-        }
+        stationListInsert(persistedObj);
         return persistedObj;
     }
 
     @Override
     public Carrier getByPK(Integer key) throws PersistException {
-        return super.getByPK(key);
+        Carrier obj = super.getByPK(key);
+
+        return obj;
     }
 
     @Override
@@ -131,5 +123,37 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     public MySqlCarrierDao(Connection connection) {
         super(connection);
+    }
+
+    private void stationListInsert(Carrier obj) throws PersistException {
+        String sql = "INSERT INTO timetable.Station_list (Carrier_id, Station_id) \n" +
+                "VALUES (?, ?);";
+        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            List<Station> stations = obj.getStations();
+            stm.setInt(1, obj.getId());
+            for (Station st: stations) {
+                stm.setInt(2, st.getStationId());
+                stm.execute();
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+    }
+
+    private List<Station> stationListSelect(Carrier obj) throws PersistException {
+        List<Station> stations = null;
+        String sql = "SELECT Station_id FROM timetable.Station_list \nWHERE Carrier_id = "
+                + obj.getId();
+        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            stations = new LinkedList<>();
+            ResultSet result = stm.executeQuery();
+            while (result.next()) {
+                stations.add((Station) Database.get(Station.class, result.getInt("Station_id")));
+            }
+            obj.setStations(stations);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return stations;
     }
 }

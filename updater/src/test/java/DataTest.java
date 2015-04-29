@@ -7,11 +7,12 @@ import parser.Parser;
 public class DataTest {
     public static void main(String[] args) {
 //        Parser p = new Parser();
-//        p.parse("×å");
+//        p.parse("ï¿½ï¿½");
 //        //Station st = new Station("1010");
 //        Database.saveDataBase(p.getStations(), p.getRoutes(), p.getWayPoints());
 //       // Database.save(st);
 //        System.out.println(1);
+
         Dump.copy();
     }
 }

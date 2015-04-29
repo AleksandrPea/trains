@@ -40,4 +40,8 @@ public class DaoTest {
             e.printStackTrace();
         }
     }
+
+    private void load() {
+
+    }
 }
