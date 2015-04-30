@@ -1,9 +1,11 @@
 package users.dao;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 27.04.2015.
+ * Виключення, яке забезпечує уніфікованість {@link DaoFactory}
+ * та {@link GenericDao}. Зокрема, воно дозволяє
+ * не зав'язуватися на {@code SqlException}.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public class PersistException extends Exception {
 

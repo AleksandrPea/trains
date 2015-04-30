@@ -3,7 +3,7 @@ package users.mysql;
 import users.dao.GenericDao;
 import users.dao.PersistException;
 import users.entities.UsersCategory;
-import users.mysql.util.Pair;
+import users.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

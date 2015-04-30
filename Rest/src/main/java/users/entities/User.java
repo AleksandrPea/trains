@@ -6,9 +6,9 @@ import users.dao.Identified;
 import java.util.Date;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 26.04.2015.
+ * Об'єктне представлення сутності "Користувач".
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public class User implements Identified<Integer> {
 

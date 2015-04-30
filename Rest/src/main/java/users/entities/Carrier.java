@@ -6,15 +6,21 @@ import users.dao.Identified;
 import java.util.List;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 28.04.2015.
+ * Об'єктне представлення сутності "Перевізник".
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public class Carrier implements Identified<Integer> {
 
     private Integer id;
+
+    /** Тариф перевезень. */
     private String tariff;
+
+    /** Додаткова інформація. Може бути null. */
     private String info;
+
+    /** Список станцій, до яких перевізник має відношення. */
     private List<Station> stations;
 
     public String getTariff() {

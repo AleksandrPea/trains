@@ -7,9 +7,12 @@ import java.sql.ResultSet;
 import java.util.List;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 27.04.2015.
+ * Абстрактний клас, який надає базову реалізацію CRUD операцій з використанням JDBC.
+ *
+ * @param <T> тип об'єкту персистенції
+ * @param <PK> тип первинного ключа
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integer>
         implements GenericDao<T, PK> {
@@ -20,15 +23,47 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         this.connection = connection;
     }
 
+    /**
+     * Повертає sql запит для вставки нового запису в базу даних.
+     * <p>INSERT INTO [Table] ([column, column, ...]) VALUES (?, ?, ...);</p>
+     */
     public abstract String getCreateQuery();
+
+    /**
+     * Повертає sql запит для отримання всіх записів із бази даних.
+     * <p>SELECT * FROM [Table]</p>
+     */
     public abstract String getSelectQuery();
+
+    /**
+     * Повертає sql запит для оновлення запису.
+     * <p>UPDATE [Table] SET [column = ?, column = ?, ...] WHERE id = ?;</p>
+     */
     public abstract String getUpdateQuery();
+
+    /**
+     * Повертає sql запит для видалення запису з бази даних.
+     * <p>DELETE FROM [Table] WHERE id= ?;</p>
+     */
     public abstract String getDeleteQuery();
 
-    protected abstract List<T> parseResultSet(ResultSet rs)
-            throws PersistException;
+    /**
+     * Розбирає {@code ResultSet} і повертає список об'єктів,
+     * які відповідають вмісту {@code ResultSet</code>.
+     */
+    protected abstract List<T> parseResultSet(ResultSet rs) throws PersistException;
+
+    /**
+     * Встановлює аргументи insert запиту у відповідності зі значеннями
+     * полів об'єкту {@code obj}.
+     */
     protected abstract void prepareStatementForInsert(PreparedStatement stm, T obj)
             throws PersistException;
+
+    /**
+     * Встановлює аргументи update запиту у відповідності зі значеннями
+     * полів об'єкту {@code obj}.
+     */
     protected abstract void prepareStatementForUpdate(PreparedStatement stm, T obj)
             throws PersistException;
 
@@ -37,6 +72,7 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         if (obj.getId() != null) {
             throw new PersistException("Object is already persisted");
         }
+        // Додаємо запис
         T persistInstance;
         String sql = getCreateQuery();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -49,7 +85,7 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         } catch (Exception e) {
             throw new PersistException(e);
         }
-
+        // Отримуємо тільки-но вставлений запис
         sql = getSelectQuery() + " WHERE id = last_insert_id();";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();
@@ -75,7 +111,6 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         } catch (Exception e) {
             throw new PersistException(e);
         }
-
         if (list == null || list.size() == 0) {
             return null;
         }

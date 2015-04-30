@@ -3,9 +3,9 @@ package users.entities;
 import users.dao.Identified;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 26.04.2015.
+ * Об'єктне представлення сутності "Категорія".
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public class Category implements Identified<Integer> {
 

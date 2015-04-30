@@ -1,16 +1,15 @@
 package users.entities;
 
-
 import users.dao.Identified;
-import users.mysql.util.Pair;
-
-import java.util.IntSummaryStatistics;
+import users.util.Pair;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 28.04.2015.
+ * Об'єктне представлення зв'язку <i>many to many</i> між {@link User}
+ * та {@link Category}.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
+
 public class UsersCategory implements Identified<Pair<Integer, Integer>> {
 
     private Integer user_id;
@@ -36,7 +35,7 @@ public class UsersCategory implements Identified<Pair<Integer, Integer>> {
 
     @Override
     public Pair<Integer, Integer> getId() {
-        return new Pair<Integer, Integer>("user_id", getUser_id(),
+        return new Pair<>("user_id", getUser_id(),
                 "category_id", getCategory_id());
     }
 }

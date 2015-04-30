@@ -3,11 +3,12 @@ package users.dao;
 import java.io.Serializable;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 27.04.2015.
+ * Інтерфейс об'єктів, що ідентифікуються.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public interface Identified<PK extends Serializable> {
 
-   public PK getId();
+     /** Повертає ідентифікатор об'єкту. */
+     public PK getId();
 }

@@ -34,7 +34,8 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
         return Arrays.asList(new Object[][]{
                 {Carrier.class, createTestCarrier()},
                 {Category.class, createTestCategory()},
-                {User.class, createTestUser()}
+                {User.class, createTestUser()},
+                {UsersCategory.class, createUsersCategory()}
         });
     }
 
