@@ -6,6 +6,7 @@ import users.dao.PersistException;
 import users.entities.Carrier;
 import users.entities.Category;
 import users.entities.User;
+import users.entities.UsersCategory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -50,6 +51,12 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
             @Override
             public GenericDao create(Connection connection) {
                 return new MySqlUserDao(connection);
+            }
+        });
+        creators.put(UsersCategory.class, new DaoCreator<Connection>() {
+            @Override
+            public GenericDao create(Connection connection) {
+                return new MySqlUsersCategoryDao(connection);
             }
         });
     }

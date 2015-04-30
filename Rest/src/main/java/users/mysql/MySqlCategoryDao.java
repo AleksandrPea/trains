@@ -25,6 +25,7 @@ public class MySqlCategoryDao extends AbstractJDBCDao<Category, Integer> {
 
     public Category create() throws PersistException {
         Category g = new Category();
+        g.setName("Unknown");
         return persist(g);
     }
 

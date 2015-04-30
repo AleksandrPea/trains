@@ -7,6 +7,7 @@ import users.entities.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,8 +25,14 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
     }
 
     public User create() throws PersistException {
-        User s = new User();
-        return persist(s);
+        User u = new User();
+        u.setEmail("blank");
+        u.setPassword("1111");
+        u.setCreate_date(new Date(System.currentTimeMillis()));
+        u.setFirstName("None");
+        u.setLastName("None");
+        u.setAddress("None");
+        return persist(u);
     }
 
     @Override

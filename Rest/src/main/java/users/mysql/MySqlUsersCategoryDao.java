@@ -1,9 +1,9 @@
 package users.mysql;
 
-import javafx.util.Pair;
 import users.dao.GenericDao;
 import users.dao.PersistException;
 import users.entities.UsersCategory;
+import users.mysql.util.Pair;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,20 +16,21 @@ import java.util.List;
  * ÊÏ², Ô²ÎÒ, ãð. ²Î-31
  * on 26.04.2015.
  */
-public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair> {
+public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Integer, Integer>> {
     private Connection connection;
 
     @Override
     public UsersCategory create() throws PersistException {
         UsersCategory g = new UsersCategory();
-        return persist(g);
+        return g;
     }
 
     @Override
     public UsersCategory persist(UsersCategory obj) throws PersistException {
         String sql = getCreateQuery();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            prepareStatementForInsert(stm, obj);
+            stm.setInt(1, obj.getUser_id());
+            stm.setInt(2, obj.getCategory_id());
             int count = stm.executeUpdate();
             if (count != 1) {
                 throw new PersistException("On persist modify more then 1 record: "
@@ -42,11 +43,12 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair> {
     }
 
     @Override
-    public UsersCategory getByPK(Pair key) throws PersistException {
-        List<T> list;
-        String sql = getSelectQuery() + " WHERE id = ?";
+    public UsersCategory getByPK(Pair pair) throws PersistException {
+        List<UsersCategory> list;
+        String sql = getSelectQuery() + " WHERE user_id = ? AND category_id = ?;";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
-            stm.setInt(1, key);
+            stm.setInt(1, (Integer) pair.getObject("user_id"));
+            stm.setInt(2, (Integer) pair.getObject("category_id"));
             ResultSet rs = stm.executeQuery();
             list = parseResultSet(rs);
         } catch (Exception e) {
@@ -64,17 +66,41 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair> {
 
     @Override
     public void update(UsersCategory obj) throws PersistException {
-
+        delete(obj);
+        persist(obj);
     }
 
     @Override
     public void delete(UsersCategory obj) throws PersistException {
-
+        String sql = getDeleteQuery();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            try {
+                stm.setInt(1, obj.getUser_id());
+                stm.setInt(2, obj.getCategory_id());
+            } catch (Exception e) {
+                throw new PersistException(e);
+            }
+            int count = stm.executeUpdate();
+            if (count != 1) {
+                throw new PersistException("On delete modify more then 1 record: "
+                        + count);
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
     }
 
     @Override
     public List<UsersCategory> getAll() throws PersistException {
-        return null;
+        List<UsersCategory> list;
+        String sql = getSelectQuery();
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            ResultSet rs = stm.executeQuery();
+            list = parseResultSet(rs);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return list;
     }
 
     public String getCreateQuery() {
@@ -83,11 +109,7 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair> {
     }
 
     public String getSelectQuery() {
-        return "SELECT user_email, category_id FROM timetable.Users_Category";
-    }
-
-    public String getUpdateQuery() {
-        return getCreateQuery();
+        return "SELECT user_id, category_id FROM timetable.Users_Category ";
     }
 
     public String getDeleteQuery() {
@@ -100,7 +122,7 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair> {
         try {
             while (rs.next()) {
                 UsersCategory usersC = new UsersCategory();
-                usersC.setuser_id(rs.getString("user_id"));
+                usersC.setUser_id(rs.getInt("user_id"));
                 usersC.setCategory_id(rs.getInt("category_id"));
                 result.add(usersC);
             }
@@ -108,22 +130,6 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair> {
             throw new PersistException(e);
         }
         return result;
-    }
-
-
-    protected void prepareStatementForInsert(PreparedStatement stm, UsersCategory obj)
-            throws PersistException {
-        try {
-            stm.setInt(1, obj.getUser_id());
-            stm.setInt(2, obj.getCategory_id());
-        } catch (Exception e) {
-            throw new PersistException(e);
-        }
-    }
-
-    protected void prepareStatementForUpdate(PreparedStatement stm, UsersCategory obj)
-            throws PersistException {
-        prepareStatementForInsert(stm, obj);
     }
 
     public MySqlUsersCategoryDao(Connection connection) {

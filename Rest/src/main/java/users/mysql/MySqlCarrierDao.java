@@ -27,6 +27,9 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     public Carrier create() throws PersistException {
         Carrier c = new Carrier();
+        c.setInfo("None");
+        c.setTariff("-");
+        c.setStations(new LinkedList<Station>());
         return persist(c);
     }
 
@@ -146,9 +149,9 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     private List<Station> stationListSelect(Carrier obj) throws PersistException {
         List<Station> stations = null;
-        String sql = "SELECT Station_id FROM timetable.Station_list WHERE Carrier_id = "
-                + obj.getId();
+        String sql = "SELECT Station_id FROM timetable.Station_list WHERE Carrier_id = ?";
         try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            stm.setInt(1, obj.getId());
             stations = new LinkedList<>();
             ResultSet result = stm.executeQuery();
             while (result.next()) {
@@ -163,9 +166,9 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     private int stationListDelete(Carrier obj) throws PersistException {
         int number;
-        String sql = "DELETE FROM timetable.Station_list WHERE Carrier_id = "
-                + obj.getId();
+        String sql = "DELETE FROM timetable.Station_list WHERE Carrier_id = ?;";
         try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            stm.setInt(1, obj.getId());
             number = stm.executeUpdate();
         } catch (Exception e) {
             throw new PersistException(e);
