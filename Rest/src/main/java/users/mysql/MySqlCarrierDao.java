@@ -20,7 +20,7 @@ import java.util.List;
 public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     private class PersistCarrier extends Carrier {
-        public void setId(int id) {
+        public void setId(Integer id) {
             super.setId(id);
         }
     }
@@ -41,23 +41,31 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
     @Override
     public Carrier getByPK(Integer key) throws PersistException {
         Carrier obj = super.getByPK(key);
-
+        obj.setStations(stationListSelect(obj));
         return obj;
     }
 
     @Override
     public void update(Carrier obj) throws PersistException {
+        stationListDelete(obj);
         super.update(obj);
+        stationListInsert(obj);
     }
 
     @Override
     public void delete(Carrier obj) throws PersistException {
+        stationListDelete(obj);
         super.delete(obj);
+
     }
 
     @Override
     public List<Carrier> getAll() throws PersistException {
-        return super.getAll();
+        List<Carrier> list = super.getAll();
+        for (Carrier carrier: list) {
+            carrier.setStations(stationListSelect(carrier));
+        }
+        return list;
     }
 
     @Override
@@ -121,10 +129,6 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         }
     }
 
-    public MySqlCarrierDao(Connection connection) {
-        super(connection);
-    }
-
     private void stationListInsert(Carrier obj) throws PersistException {
         String sql = "INSERT INTO timetable.Station_list (Carrier_id, Station_id) \n" +
                 "VALUES (?, ?);";
@@ -142,7 +146,7 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     private List<Station> stationListSelect(Carrier obj) throws PersistException {
         List<Station> stations = null;
-        String sql = "SELECT Station_id FROM timetable.Station_list \nWHERE Carrier_id = "
+        String sql = "SELECT Station_id FROM timetable.Station_list WHERE Carrier_id = "
                 + obj.getId();
         try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
             stations = new LinkedList<>();
@@ -155,5 +159,21 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
             throw new PersistException(e);
         }
         return stations;
+    }
+
+    private int stationListDelete(Carrier obj) throws PersistException {
+        int number;
+        String sql = "DELETE FROM timetable.Station_list WHERE Carrier_id = "
+                + obj.getId();
+        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            number = stm.executeUpdate();
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return number;
+    }
+
+    public MySqlCarrierDao(Connection connection) {
+        super(connection);
     }
 }

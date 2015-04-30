@@ -10,17 +10,26 @@ import java.util.Date;
  * ÊÏ², Ô²ÎÒ, ãð. ²Î-31
  * on 26.04.2015.
  */
-public class User implements Identified<String> {
+public class User implements Identified<Integer> {
 
+    private Integer id;
     private String email;
     private String password;
+    private Date create_date;
     private String lastName;
     private String firstName;
     private String address;
-    private Integer carrier_id;
-    private Date create_date;
+    private Integer carrier_id = null;
 
-    public String getId() {
+    public Integer getId() {
+        return id;
+    }
+
+    protected void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
         return email;
     }
 

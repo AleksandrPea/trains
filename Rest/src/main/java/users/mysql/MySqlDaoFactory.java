@@ -46,12 +46,12 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
                 return new MySqlCarrierDao((connection));
             }
         });
-//        creators.put(User.class, new DaoCreator<Connection>() {
-//            @Override
-//            public GenericDao create(Connection connection) {
-//                return new MySqlUserDao(connection);
-//            }
-//        });
+        creators.put(User.class, new DaoCreator<Connection>() {
+            @Override
+            public GenericDao create(Connection connection) {
+                return new MySqlUserDao(connection);
+            }
+        });
     }
 
     @Override

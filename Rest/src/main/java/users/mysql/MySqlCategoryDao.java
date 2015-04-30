@@ -18,7 +18,7 @@ import java.util.List;
 public class MySqlCategoryDao extends AbstractJDBCDao<Category, Integer> {
 
     private class PersistCategory extends Category {
-        public void setId(int id) {
+        public void setId(Integer id) {
             super.setId(id);
         }
     }
