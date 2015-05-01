@@ -1,7 +1,7 @@
-package users.entities;
+package users.db.entities;
 
 
-import users.dao.Identified;
+import users.db.dao.Identified;
 
 import java.util.Date;
 

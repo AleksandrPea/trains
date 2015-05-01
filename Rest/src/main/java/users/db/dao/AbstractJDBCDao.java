@@ -1,6 +1,5 @@
-package users.dao;
+package users.db.dao;
 
-import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

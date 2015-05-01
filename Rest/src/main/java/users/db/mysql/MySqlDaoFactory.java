@@ -1,12 +1,12 @@
-package users.mysql;
+package users.db.mysql;
 
-import users.dao.DaoFactory;
-import users.dao.GenericDao;
-import users.dao.PersistException;
-import users.entities.Carrier;
-import users.entities.Category;
-import users.entities.User;
-import users.entities.UsersCategory;
+import users.db.dao.DaoFactory;
+import users.db.dao.GenericDao;
+import users.db.dao.PersistException;
+import users.db.entities.Carrier;
+import users.db.entities.Category;
+import users.db.entities.User;
+import users.db.entities.UsersCategory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,21 +15,21 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 26.04.2015.
+ * Реалізація інтерфейсу {@link DaoFactory} для бази даних MySql.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public class MySqlDaoFactory implements DaoFactory<Connection> {
 
-    private String driver = "com.mysql.jdbc.Driver";
-    private String url = "jdbc:mysql://localhost:3306/timetable";
-    private String user = "root";
-    private String password = "1111";
+    private String driver = "com.mysql.jdbc.Driver";              // Ім'я драйвера
+    private String url = "jdbc:mysql://localhost:3306/timetable"; // URL адреса
+    private String user = "root";                                 // Логін користувача
+    private String password = "1111";                             // Пароль користувача
     private Map<Class, DaoCreator> creators;
 
     public MySqlDaoFactory() {
         try {
-            Class.forName(driver);
+            Class.forName(driver);                                // Регістрація драйвера
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

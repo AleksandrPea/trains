@@ -1,9 +1,12 @@
-package users.mysql;
+package users.db.mysql;
 
-import users.dao.GenericDao;
-import users.dao.PersistException;
-import users.entities.UsersCategory;
-import users.util.Pair;
+import users.db.dao.AbstractJDBCDao;
+import users.db.dao.GenericDao;
+import users.db.dao.PersistException;
+import users.db.entities.Category;
+import users.db.entities.UsersCategory;
+import users.db.util.Pair;
+import users.db.entities.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,12 +15,18 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 26.04.2015.
+ * Клас для управління зв'язком <i>many to many</i> між {@link User}
+ * та {@link Category} у базі даних MySql.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Integer, Integer>> {
+
     private Connection connection;
+
+    public MySqlUsersCategoryDao(Connection connection) {
+        this.connection = connection;
+    }
 
     @Override
     public UsersCategory create() throws PersistException {
@@ -54,7 +63,6 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
         } catch (Exception e) {
             throw new PersistException(e);
         }
-
         if (list == null || list.size() == 0) {
             return null;
         }
@@ -66,7 +74,6 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
 
     @Override
     public void update(UsersCategory obj) throws PersistException {
-        delete(obj);
         persist(obj);
     }
 
@@ -103,20 +110,35 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
         return list;
     }
 
+    /**
+     * Дивись <b>see also</b>.
+     * @see AbstractJDBCDao#getCreateQuery()
+     */
     public String getCreateQuery() {
         return "INSERT INTO timetable.Users_Category (user_id, category_id) \n" +
                 "VALUES (?, ?);";
     }
 
+    /**
+     * Дивись <b>see also</b>.
+     * @see AbstractJDBCDao#getSelectQuery()
+     */
     public String getSelectQuery() {
         return "SELECT user_id, category_id FROM timetable.Users_Category ";
     }
 
+    /**
+     * Дивись <b>see also</b>.
+     * @see AbstractJDBCDao#getDeleteQuery()
+     */
     public String getDeleteQuery() {
         return "DELETE FROM timetable.Users_Category WHERE user_id = ?, category_id = ?;";
     }
 
-
+    /**
+     * Дивись <b>see also</b>.
+     * @see AbstractJDBCDao#parseResultSet(ResultSet)
+     */
     protected List<UsersCategory> parseResultSet(ResultSet rs) throws PersistException {
         LinkedList<UsersCategory> result = new LinkedList<>();
         try {
@@ -130,9 +152,5 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
             throw new PersistException(e);
         }
         return result;
-    }
-
-    public MySqlUsersCategoryDao(Connection connection) {
-        this.connection = connection;
     }
 }

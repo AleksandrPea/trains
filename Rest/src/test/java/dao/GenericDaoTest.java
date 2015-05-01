@@ -1,10 +1,11 @@
+package dao;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import users.dao.GenericDao;
-import users.dao.Identified;
+import users.db.dao.GenericDao;
+import users.db.dao.Identified;
 
 import java.io.Serializable;
 import java.util.List;
@@ -12,24 +13,19 @@ import java.util.List;
 @RunWith(Parameterized.class)
 public abstract class GenericDaoTest<Context> {
 
-    /**
-     * Класс тестируемого дао объекта
-     */
+    /** Клас дао об'єкту, що проходить тестування. */
     protected Class daoClass;
 
     /**
-     * Экземпляр доменного объекта, которому не соответствует запись в системе хранения
+     * Екземпляр сутності, для якої немає відповідного
+     * запису в системі зберігання даних.
      */
     protected Identified notPersistedDto;
 
-    /**
-     * Экземпляр тестируемого дао объекта
-     */
+    /** Екземпляр дао об'єкту, що проходить тестування. */
     public abstract GenericDao dao();
 
-    /**
-     * Контекст взаимодействия с системой хранения данных
-     */
+    /** Конекст взаємодії зі системи зберігання даних. */
     public abstract Context context();
 
     @Test

@@ -1,4 +1,4 @@
-package users.mysql.util;
+package users.db.util;
 
 import java.io.Serializable;
 

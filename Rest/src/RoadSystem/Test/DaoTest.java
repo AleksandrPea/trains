@@ -1,11 +1,11 @@
 package Test;
 
-import users.dao.DaoFactory;
-import users.dao.GenericDao;
-import users.dao.PersistException;
-import users.entities.Carrier;
-import users.entities.User;
-import users.mysql.MySqlDaoFactory;
+import users.db.dao.DaoFactory;
+import users.db.dao.GenericDao;
+import users.db.dao.PersistException;
+import users.db.entities.Carrier;
+import users.db.entities.User;
+import users.db.mysql.MySqlDaoFactory;
 
 /**
  * Зроблений Горохом Олександром,

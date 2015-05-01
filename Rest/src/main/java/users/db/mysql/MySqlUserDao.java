@@ -1,8 +1,8 @@
-package users.mysql;
+package users.db.mysql;
 
-import users.dao.AbstractJDBCDao;
-import users.dao.PersistException;
-import users.entities.User;
+import users.db.dao.AbstractJDBCDao;
+import users.db.dao.PersistException;
+import users.db.entities.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -12,16 +12,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 26.04.2015.
+ * Клас для управління персистентним станом об'єктів класу {@link User}
+ * у базі даних MySql.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
 
+    /**
+     * Клас, що робить метод {@code setId} класу {@link User} доступним
+     * тільки для об'єктів відповідного Dao класу {@link MySqlUserDao}.
+     */
     private class PersistUser extends User {
         public void setId(Integer id) {
             super.setId(id);
         }
+    }
+
+    public MySqlUserDao(Connection connection) {
+        super(connection);
     }
 
     public User create() throws PersistException {
@@ -124,9 +133,5 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             return null;
         }
         return new java.sql.Date(date.getTime());
-    }
-
-    public MySqlUserDao(Connection connection) {
-        super(connection);
     }
 }

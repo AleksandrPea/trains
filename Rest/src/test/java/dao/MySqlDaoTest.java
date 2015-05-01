@@ -1,19 +1,19 @@
+package dao;
 
 import ORMroad.Database;
 import ORMroad.Station;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runners.Parameterized;
-import users.dao.DaoFactory;
-import users.dao.GenericDao;
-import users.dao.Identified;
-import users.dao.PersistException;
-import users.entities.Carrier;
-import users.entities.Category;
-import users.entities.User;
-import users.entities.UsersCategory;
-import users.mysql.MySqlDaoFactory;
-
+import users.db.dao.DaoFactory;
+import users.db.dao.GenericDao;
+import users.db.dao.Identified;
+import users.db.dao.PersistException;
+import users.db.entities.Carrier;
+import users.db.entities.Category;
+import users.db.entities.User;
+import users.db.entities.UsersCategory;
+import users.db.mysql.MySqlDaoFactory;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -34,8 +34,7 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
         return Arrays.asList(new Object[][]{
                 {Carrier.class, createTestCarrier()},
                 {Category.class, createTestCategory()},
-                {User.class, createTestUser()},
-                {UsersCategory.class, createUsersCategory()}
+                {User.class, createTestUser()}
         });
     }
 
@@ -95,7 +94,7 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
         return u;
     }
 
-    public static UsersCategory createUsersCategory() {
+    public static UsersCategory createTestUsersCategory() {
         UsersCategory uc = new UsersCategory();
         uc.setUser_id(1);
         uc.setCategory_id(1);

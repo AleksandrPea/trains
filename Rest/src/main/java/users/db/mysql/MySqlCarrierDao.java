@@ -1,10 +1,10 @@
-package users.mysql;
+package users.db.mysql;
 
 import ORMroad.Database;
 import ORMroad.Station;
-import users.dao.AbstractJDBCDao;
-import users.dao.PersistException;
-import users.entities.Carrier;
+import users.db.dao.AbstractJDBCDao;
+import users.db.dao.PersistException;
+import users.db.entities.Carrier;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,16 +13,25 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Зроблений Горохом Олександром,
- * КПІ, ФІОТ, гр. ІО-31
- * on 26.04.2015.
+ * Клас для управління персистентним станом об'єктів класу {@link Carrier}
+ * у базі даних MySql.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
 public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
+    /**
+     * Клас, що робить метод {@code setId} класу {@link Carrier} доступним
+     * тільки для об'єктів відповідного Dao класу {@link MySqlCarrierDao}.
+     */
     private class PersistCarrier extends Carrier {
         public void setId(Integer id) {
             super.setId(id);
         }
+    }
+
+    public MySqlCarrierDao(Connection connection) {
+        super(connection);
     }
 
     public Carrier create() throws PersistException {
@@ -48,6 +57,12 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         return obj;
     }
 
+    /**
+     * Зберігає стан об'єкту obj в базі даних.
+     * Записи з таблиці, яка містить асоційовані станції
+     * з перевізником obj, спочатку видаляються, а потім
+     * встановлюються нові.
+     */
     @Override
     public void update(Carrier obj) throws PersistException {
         stationListDelete(obj);
@@ -132,6 +147,11 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         }
     }
 
+    /**
+     * Створює записи у таблиці, яка представляє зв'язок <i>many to many</i> між
+     * {@link Carrier} та {@link Station}. Тобто асоціює об'єкт {@code obj} зі
+     * станціями, які він інкапсулює, у базі даних.
+     */
     private void stationListInsert(Carrier obj) throws PersistException {
         String sql = "INSERT INTO timetable.Station_list (Carrier_id, Station_id) \n" +
                 "VALUES (?, ?);";
@@ -147,6 +167,7 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         }
     }
 
+    /** Повертає список станцій з бази даних, що асоційовані з об'єктом {@code obj}. */
     private List<Station> stationListSelect(Carrier obj) throws PersistException {
         List<Station> stations = null;
         String sql = "SELECT Station_id FROM timetable.Station_list WHERE Carrier_id = ?";
@@ -164,6 +185,7 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         return stations;
     }
 
+    /** Видаляє список станцій з бази даних, що асоційовані з об'єктом {@code obj}. */
     private int stationListDelete(Carrier obj) throws PersistException {
         int number;
         String sql = "DELETE FROM timetable.Station_list WHERE Carrier_id = ?;";
@@ -174,9 +196,5 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
             throw new PersistException(e);
         }
         return number;
-    }
-
-    public MySqlCarrierDao(Connection connection) {
-        super(connection);
     }
 }

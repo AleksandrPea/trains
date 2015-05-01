@@ -1,4 +1,4 @@
-package users.dao;
+package users.db.dao;
 
 /**
  * Виключення, яке забезпечує уніфікованість {@link DaoFactory}
