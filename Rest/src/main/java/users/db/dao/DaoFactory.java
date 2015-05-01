@@ -13,8 +13,8 @@ public interface DaoFactory<Context> {
         public GenericDao create(Context context);
     }
 
-    /** Повертає підключення до бази даних. */
-    public Context getContext() throws PersistException;
+    /** Cтворює підключення до бази даних за замовчуванням. */
+    public Context createContext() throws PersistException;
 
     /**
      * Повертає об'єкт для управління персистентним станом інших об'єктів.

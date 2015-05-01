@@ -37,7 +37,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         User u = new User();
         u.setEmail("blank");
         u.setPassword("1111");
-        u.setCreate_date(new Date(System.currentTimeMillis()));
+        u.setCreate_date(new Date());
         u.setFirstName("None");
         u.setLastName("None");
         u.setAddress("None");

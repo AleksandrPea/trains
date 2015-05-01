@@ -7,6 +7,9 @@ import users.db.entities.Carrier;
 import users.db.entities.User;
 import users.db.mysql.MySqlDaoFactory;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * Зроблений Горохом Олександром,
  * КПІ, ФІОТ, гр. ІО-31
@@ -15,12 +18,6 @@ import users.db.mysql.MySqlDaoFactory;
 public class DaoTest {
 
     public static void main(String[] args) throws PersistException {
-        DaoFactory factory = new MySqlDaoFactory();
-        GenericDao carDao = null;
-        GenericDao userDao = null;
-
-        carDao = factory.getDao(factory.getContext(), Carrier.class);
-        userDao = factory.getDao(factory.getContext(), User.class);
 
 
     }

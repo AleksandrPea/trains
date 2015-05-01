@@ -21,15 +21,15 @@ import java.util.Map;
  */
 public class MySqlDaoFactory implements DaoFactory<Connection> {
 
-    private String driver = "com.mysql.jdbc.Driver";              // Ім'я драйвера
-    private String url = "jdbc:mysql://localhost:3306/timetable"; // URL адреса
-    private String user = "root";                                 // Логін користувача
-    private String password = "1111";                             // Пароль користувача
+    private String driver = "com.mysql.jdbc.Driver";
+    private String url = "jdbc:mysql://localhost:3306/timetable";
+    private String user = "root";
+    private String password = "1111";
     private Map<Class, DaoCreator> creators;
 
-    public MySqlDaoFactory() {
+    private MySqlDaoFactory() {
         try {
-            Class.forName(driver);                                // Регістрація драйвера
+            Class.forName(driver);              // Регістрація драйвера
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,18 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     }
 
     @Override
-    public Connection getContext() throws PersistException {
+    public Connection createContext() throws PersistException {
+        return createContext(url, user, password);
+    }
+
+    /**
+     * Cтворює підключення до MySql бази даних за заданими параметрами.
+     * @param url URL адреса бази даних
+     * @param user логін користувача бази даних
+     * @param password пароль користувача бази даних
+     */
+    public Connection createContext(String url, String user, String password)
+            throws PersistException {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url, user, password);
@@ -79,5 +90,13 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
             throw new PersistException("Dao object for " + dtoClass + " not found.");
         }
         return creator.create(connection);
+    }
+
+    public static MySqlDaoFactory getInstance() {
+        return SingletonHelper.instance;
+    }
+
+    private static class SingletonHelper {
+        private static final MySqlDaoFactory instance = new MySqlDaoFactory();
     }
 }
