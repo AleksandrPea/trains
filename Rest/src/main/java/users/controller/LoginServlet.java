@@ -51,14 +51,13 @@ public class LoginServlet extends HttpServlet {
                     RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
                     PrintWriter out = response.getWriter();
                     System.out.println(("User not found with email="+email));
-                    out.println("<font color=red></font>");
+                    out.println("<font color=red>No user found with given email id, please register first.</font>");
                     rd.include(request, response);
                 }
             } catch (PersistException e) {
                 e.printStackTrace();
                 throw new ServletException("DB Connection problem.");
             }
-
         }
     }
 }

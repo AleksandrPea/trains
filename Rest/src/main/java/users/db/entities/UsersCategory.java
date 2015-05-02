@@ -4,10 +4,10 @@ import users.db.dao.Identified;
 import users.util.Pair;
 
 /**
- * Об'єктне представлення зв'язку <i>many to many</i> між {@link User}
- * та {@link Category}.
+ * РћР±'С”РєС‚РЅРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРЅСЏ Р·РІ'СЏР·РєСѓ <i>many to many</i> РјС–Р¶ {@link User}
+ * С‚Р° {@link Category}.
  *
- * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ * @author Р“РѕСЂРѕС… РћР»РµРєСЃР°РЅРґСЂ РЎРµСЂРіС–Р№РѕРІРёС‡, РіСЂ. Р†Рћ-31, Р¤Р†РћРў, РќРўРЈРЈ РљРџР†
  */
 
 public class UsersCategory implements Identified<Pair<Integer, Integer>> {

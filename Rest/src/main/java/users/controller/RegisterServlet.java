@@ -1,8 +1,11 @@
 package users.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import users.db.dao.GenericDao;
 import users.db.dao.PersistException;
+import users.db.entities.Carrier;
 import users.db.entities.User;
+import users.db.mysql.MySqlCarrierDao;
 import users.db.mysql.MySqlDaoFactory;
 import users.db.mysql.MySqlUserDao;
 
@@ -10,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -30,6 +34,17 @@ public class RegisterServlet extends HttpServlet {
         String lastName = request.getParameter("lastName");
         String firstName = request.getParameter("firstName");
         String address = request.getParameter("address");
+
+        boolean isCarrier = false;
+        String tariff = null;
+        String info = null;
+        String[] category = request.getParameterValues("category");
+        if (category != null && category.equals("carrier")) {
+            isCarrier = true;
+            tariff = request.getParameter("tariff");
+            info = request.getParameter("info");
+        }
+
         String errorMsg = null;
         if (email == null || email.equals("")) {
             errorMsg = "User Email can't be null or empty";
@@ -46,6 +61,9 @@ public class RegisterServlet extends HttpServlet {
         if (address == null || address.equals("")) {
             errorMsg = "Address can't be null or empty";
         }
+        if (isCarrier && (tariff == null || tariff.equals(""))) {
+            errorMsg = "Tariff can't be null or empty";
+        }
 
         if(errorMsg != null) {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
@@ -56,15 +74,24 @@ public class RegisterServlet extends HttpServlet {
             Connection con = (Connection) getServletContext().getAttribute("DBConnection");
             MySqlDaoFactory factory = MySqlDaoFactory.getInstance();
             try {
-                MySqlUserDao dao = (MySqlUserDao) factory.getDao(con, User.class);
-                User user = new User();
-                user.setEmail(email);
+                MySqlUserDao udao = (MySqlUserDao) factory.getDao(con, User.class);
+                User user = udao.create();
                 user.setPassword(password);
                 user.setCreate_date(new Date());
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setAddress(address);
-                dao.persist(user);
+
+                if (isCarrier) {
+                    MySqlCarrierDao cdao = (MySqlCarrierDao) factory.getDao(con, Carrier.class);
+                    Carrier carrier = cdao.create();
+                    carrier.setTariff(tariff);
+                    carrier.setInfo(info);
+                    cdao.update(carrier);
+                    user.setCarrier_id(carrier.getId());
+                }
+                user.setEmail(email);
+                udao.update(user);
                 //forward to login page to login
                 RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
                 PrintWriter out = response.getWriter();
@@ -73,12 +100,12 @@ public class RegisterServlet extends HttpServlet {
             } catch (PersistException e) {
                 try {
                     SQLException sqlE = (SQLException) e.getCause();
-                    if(sqlE.getErrorCode() == 1062) { // код, який вказує на спробу копіювання унікальних полів
+                    if(sqlE.getErrorCode() == 1062) { // РєРѕРґ, С‰Рѕ СЃРІС–РґС‡РёС‚СЊ РїСЂРѕ РЅР°РјР°РіР°РЅРЅСЏ РєРѕРїС–СЋРІР°РЅРЅСЏ СѓРЅС–РєР°Р»СЊРЅРѕРіРѕ РїРѕР»СЏ
                         RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
                         PrintWriter out = response.getWriter();
                         out.println("<font color=red>This email already exists</font>");
                         rd.include(request, response);
-                    } else throw new ServletException("DB Connection problem ");
+                    } else throw new ServletException("DB Connection problem " + sqlE.getMessage());
                 } catch (ClassCastException cce) {throw new ServletException("DB Connection problem ");}
             }
         }

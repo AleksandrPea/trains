@@ -3,18 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <title>Register Page</title>
+
+    <script type="text/javascript">
+        function showOrHide(cb, cat) {
+            cb = document.getElementById(cb);
+            cat = document.getElementById(cat);
+            if (cb.checked) cat.style.display = "block";
+            else cat.style.display = "none";
+        }
+    </script>
 </head>
 <body>
 <h3>Provide all the fields for registration.</h3>
-<form action="Register" method="post">
+<form action="Register" method="post" id ="usrform">
     <strong>Email</strong>:<input type="text" name="email"><br>
     <strong>Password</strong>:<input type="password" name="password"><br>
     <strong>Last name</strong>:<input type="text" name="lastName"><br>
     <strong>First name</strong>:<input type="text" name="firstName"><br>
     <strong>Address</strong>:<input type="text" name="address"><br>
+    <strong>If you are a carrier check this</strong>:<input type="checkbox"
+         name="category" value="carrier" id = 'cb' onchange="showOrHide('cb', 'carrier');"><br>
+    <div id = 'carrier' style="display: none;">
+        <strong>Your tariff</strong>:<input type="text" name="tariff"><br>
+        <strong>Additional information</strong>:<textarea name="info"
+            form="usrform">Enter text here...</textarea>
+
+    </div>
     <input type="submit" value="Register">
 </form>
 <br>
 If you are registered user, please <a href="login.html">login</a>.
+
+
 </body>
 </html>

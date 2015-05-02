@@ -29,7 +29,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         }
     }
 
-    private int counter = 0;
+    private static int counter = 0;
 
     public MySqlUserDao(Connection connection) {
         super(connection);
