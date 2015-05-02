@@ -11,16 +11,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Клас для управління персистентним станом об'єктів класу {@link Category}
- * у базі даних MySql.
+ * РљР»Р°СЃ РґР»СЏ СѓРїСЂР°РІР»С–РЅРЅСЏ РїРµСЂСЃРёСЃС‚РµРЅС‚РЅРёРј СЃС‚Р°РЅРѕРј РѕР±'С”РєС‚С–РІ РєР»Р°СЃСѓ {@link Category}
+ * Сѓ Р±Р°Р·С– РґР°РЅРёС… MySql.
  *
- * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ * @author Р“РѕСЂРѕС… РћР»РµРєСЃР°РЅРґСЂ РЎРµСЂРіС–Р№РѕРІРёС‡, РіСЂ. Р†Рћ-31, Р¤Р†РћРў, РќРўРЈРЈ РљРџР†
  */
 public class MySqlCategoryDao extends AbstractJDBCDao<Category, Integer> {
 
     /**
-     * Клас, що робить метод {@code setId} класу {@link Category} доступним
-     * тільки для об'єктів відповідного Dao класу {@link  MySqlCategoryDao}.
+     * РљР»Р°СЃ, С‰Рѕ СЂРѕР±РёС‚СЊ РјРµС‚РѕРґ {@code setId} РєР»Р°СЃСѓ {@link Category} РґРѕСЃС‚СѓРїРЅРёРј
+     * С‚С–Р»СЊРєРё РґР»СЏ РѕР±'С”РєС‚С–РІ РІС–РґРїРѕРІС–РґРЅРѕРіРѕ Dao РєР»Р°СЃСѓ {@link  MySqlCategoryDao}.
      */
     private class PersistCategory extends Category {
         public void setId(Integer id) {

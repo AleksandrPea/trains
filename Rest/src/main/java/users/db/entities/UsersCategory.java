@@ -1,7 +1,7 @@
 package users.db.entities;
 
 import users.db.dao.Identified;
-import users.db.util.Pair;
+import users.util.Pair;
 
 /**
  * Об'єктне представлення зв'язку <i>many to many</i> між {@link User}

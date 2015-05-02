@@ -12,16 +12,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Клас для управління персистентним станом об'єктів класу {@link User}
- * у базі даних MySql.
+ * РљР»Р°СЃ РґР»СЏ СѓРїСЂР°РІР»С–РЅРЅСЏ РїРµСЂСЃРёСЃС‚РµРЅС‚РЅРёРј СЃС‚Р°РЅРѕРј РѕР±'С”РєС‚С–РІ РєР»Р°СЃСѓ {@link User}
+ * Сѓ Р±Р°Р·С– РґР°РЅРёС… MySql.
  *
- * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ * @author Р“РѕСЂРѕС… РћР»РµРєСЃР°РЅРґСЂ РЎРµСЂРіС–Р№РѕРІРёС‡, РіСЂ. Р†Рћ-31, Р¤Р†РћРў, РќРўРЈРЈ РљРџР†
  */
 public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     /**
-     * Клас, що робить метод {@code setId} класу {@link User} доступним
-     * тільки для об'єктів відповідного Dao класу {@link MySqlUserDao}.
+     * РљР»Р°СЃ, С‰Рѕ СЂРѕР±РёС‚СЊ РјРµС‚РѕРґ {@code setId} РєР»Р°СЃСѓ {@link User} РґРѕСЃС‚СѓРїРЅРёРј
+     * С‚С–Р»СЊРєРё РґР»СЏ РѕР±'С”РєС‚С–РІ РІС–РґРїРѕРІС–РґРЅРѕРіРѕ Dao РєР»Р°СЃСѓ {@link MySqlUserDao}.
      */
     private class PersistUser extends User {
         public void setId(Integer id) {
@@ -72,8 +72,8 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
     }
 
     /**
-     * Повертає об'єкт класу {@code User}, який відповідає запису з поштовою адресою
-     * {@code email} та паролем {@code password}. Якщо такого запису немає, повертає {@code null}.
+     * РџРѕРІРµСЂС‚Р°С” РѕР±'С”РєС‚ РєР»Р°СЃСѓ {@code User}, СЏРєРёР№ РІС–РґРїРѕРІС–РґР°С” Р·Р°РїРёСЃСѓ Р· РїРѕС€С‚РѕРІРѕСЋ Р°РґСЂРµСЃРѕСЋ
+     * {@code email} С‚Р° РїР°СЂРѕР»РµРј {@code password}. РЇРєС‰Рѕ С‚Р°РєРѕРіРѕ Р·Р°РїРёСЃСѓ РЅРµРјР°С”, РїРѕРІРµСЂС‚Р°С” {@code null}.
      */
     public User getByCredentials(String email, String password) throws PersistException {
         List<User> list;

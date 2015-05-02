@@ -6,12 +6,12 @@ import java.sql.ResultSet;
 import java.util.List;
 
 /**
- * Абстрактний клас, який надає базову реалізацію CRUD операцій з використанням JDBC.
+ * РђР±СЃС‚СЂР°РєС‚РЅРёР№ РєР»Р°СЃ, СЏРєРёР№ РЅР°РґР°С” Р±Р°Р·РѕРІСѓ СЂРµР°Р»С–Р·Р°С†С–СЋ CRUD РѕРїРµСЂР°С†С–Р№ Р· РІРёРєРѕСЂРёСЃС‚Р°РЅРЅСЏРј JDBC.
  *
- * @param <T> тип об'єкту персистенції
- * @param <PK> тип первинного ключа
+ * @param <T> С‚РёРї РѕР±'С”РєС‚Сѓ РїРµСЂСЃРёСЃС‚РµРЅС†С–С—
+ * @param <PK> С‚РёРї РїРµСЂРІРёРЅРЅРѕРіРѕ РєР»СЋС‡Р°
  *
- * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ * @author Р“РѕСЂРѕС… РћР»РµРєСЃР°РЅРґСЂ РЎРµСЂРіС–Р№РѕРІРёС‡, РіСЂ. Р†Рћ-31, Р¤Р†РћРў, РќРўРЈРЈ РљРџР†
  */
 public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integer>
         implements GenericDao<T, PK> {
@@ -23,45 +23,45 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
     }
 
     /**
-     * Повертає sql запит для вставки нового запису в базу даних.
+     * РџРѕРІРµСЂС‚Р°С” sql Р·Р°РїРёС‚ РґР»СЏ РІСЃС‚Р°РІРєРё РЅРѕРІРѕРіРѕ Р·Р°РїРёСЃСѓ РІ Р±Р°Р·Сѓ РґР°РЅРёС….
      * <p>INSERT INTO [Table] ([column, column, ...]) VALUES (?, ?, ...);</p>
      */
     public abstract String getCreateQuery();
 
     /**
-     * Повертає sql запит для отримання всіх записів із бази даних.
+     * РџРѕРІРµСЂС‚Р°С” sql Р·Р°РїРёС‚ РґР»СЏ РѕС‚СЂРёРјР°РЅРЅСЏ РІСЃС–С… Р·Р°РїРёСЃС–РІ С–Р· Р±Р°Р·Рё РґР°РЅРёС….
      * <p>SELECT * FROM [Table]</p>
      */
     public abstract String getSelectQuery();
 
     /**
-     * Повертає sql запит для оновлення запису.
+     * РџРѕРІРµСЂС‚Р°С” sql Р·Р°РїРёС‚ РґР»СЏ РѕРЅРѕРІР»РµРЅРЅСЏ Р·Р°РїРёСЃСѓ.
      * <p>UPDATE [Table] SET [column = ?, column = ?, ...] WHERE id = ?;</p>
      */
     public abstract String getUpdateQuery();
 
     /**
-     * Повертає sql запит для видалення запису з бази даних.
+     * РџРѕРІРµСЂС‚Р°С” sql Р·Р°РїРёС‚ РґР»СЏ РІРёРґР°Р»РµРЅРЅСЏ Р·Р°РїРёСЃСѓ Р· Р±Р°Р·Рё РґР°РЅРёС….
      * <p>DELETE FROM [Table] WHERE id= ?;</p>
      */
     public abstract String getDeleteQuery();
 
     /**
-     * Розбирає {@code ResultSet} і повертає список об'єктів,
-     * які відповідають вмісту {@code ResultSet</code>.
+     * Р РѕР·Р±РёСЂР°С” {@code ResultSet} С– РїРѕРІРµСЂС‚Р°С” СЃРїРёСЃРѕРє РѕР±'С”РєС‚С–РІ,
+     * СЏРєС– РІС–РґРїРѕРІС–РґР°СЋС‚СЊ РІРјС–СЃС‚Сѓ {@code ResultSet</code>.
      */
     protected abstract List<T> parseResultSet(ResultSet rs) throws PersistException;
 
     /**
-     * Встановлює аргументи insert запиту у відповідності зі значеннями
-     * полів об'єкту {@code obj}.
+     * Р’СЃС‚Р°РЅРѕРІР»СЋС” Р°СЂРіСѓРјРµРЅС‚Рё insert Р·Р°РїРёС‚Сѓ Сѓ РІС–РґРїРѕРІС–РґРЅРѕСЃС‚С– Р·С– Р·РЅР°С‡РµРЅРЅСЏРјРё
+     * РїРѕР»С–РІ РѕР±'С”РєС‚Сѓ {@code obj}.
      */
     protected abstract void prepareStatementForInsert(PreparedStatement stm, T obj)
             throws PersistException;
 
     /**
-     * Встановлює аргументи update запиту у відповідності зі значеннями
-     * полів об'єкту {@code obj}.
+     * Р’СЃС‚Р°РЅРѕРІР»СЋС” Р°СЂРіСѓРјРµРЅС‚Рё update Р·Р°РїРёС‚Сѓ Сѓ РІС–РґРїРѕРІС–РґРЅРѕСЃС‚С– Р·С– Р·РЅР°С‡РµРЅРЅСЏРјРё
+     * РїРѕР»С–РІ РѕР±'С”РєС‚Сѓ {@code obj}.
      */
     protected abstract void prepareStatementForUpdate(PreparedStatement stm, T obj)
             throws PersistException;
@@ -71,7 +71,7 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         if (obj.getId() != null) {
             throw new PersistException("Object is already persisted");
         }
-        // Додаємо запис
+        // Р”РѕРґР°С”РјРѕ Р·Р°РїРёСЃ
         T persistInstance;
         String sql = getCreateQuery();
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
@@ -84,7 +84,7 @@ public abstract class AbstractJDBCDao<T extends Identified<PK>, PK extends Integ
         } catch (Exception e) {
             throw new PersistException(e);
         }
-        // Отримуємо тільки-но вставлений запис
+        // РћС‚СЂРёРјСѓС”РјРѕ С‚С–Р»СЊРєРё-РЅРѕ РІСЃС‚Р°РІР»РµРЅРёР№ Р·Р°РїРёСЃ
         sql = getSelectQuery() + " WHERE id = last_insert_id();";
         try (PreparedStatement stm = connection.prepareStatement(sql)) {
             ResultSet rs = stm.executeQuery();

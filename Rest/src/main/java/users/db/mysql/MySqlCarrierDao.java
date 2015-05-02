@@ -13,16 +13,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Клас для управління персистентним станом об'єктів класу {@link Carrier}
- * у базі даних MySql.
+ * РљР»Р°СЃ РґР»СЏ СѓРїСЂР°РІР»С–РЅРЅСЏ РїРµСЂСЃРёСЃС‚РµРЅС‚РЅРёРј СЃС‚Р°РЅРѕРј РѕР±'С”РєС‚С–РІ РєР»Р°СЃСѓ {@link Carrier}
+ * Сѓ Р±Р°Р·С– РґР°РЅРёС… MySql.
  *
- * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ * @author Р“РѕСЂРѕС… РћР»РµРєСЃР°РЅРґСЂ РЎРµСЂРіС–Р№РѕРІРёС‡, РіСЂ. Р†Рћ-31, Р¤Р†РћРў, РќРўРЈРЈ РљРџР†
  */
 public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     /**
-     * Клас, що робить метод {@code setId} класу {@link Carrier} доступним
-     * тільки для об'єктів відповідного Dao класу {@link MySqlCarrierDao}.
+     * РљР»Р°СЃ, С‰Рѕ СЂРѕР±РёС‚СЊ РјРµС‚РѕРґ {@code setId} РєР»Р°СЃСѓ {@link Carrier} РґРѕСЃС‚СѓРїРЅРёРј
+     * С‚С–Р»СЊРєРё РґР»СЏ РѕР±'С”РєС‚С–РІ РІС–РґРїРѕРІС–РґРЅРѕРіРѕ Dao РєР»Р°СЃСѓ {@link MySqlCarrierDao}.
      */
     private class PersistCarrier extends Carrier {
         public void setId(Integer id) {
@@ -58,10 +58,10 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
     }
 
     /**
-     * Зберігає стан об'єкту obj в базі даних.
-     * Записи з таблиці, яка містить асоційовані станції
-     * з перевізником obj, спочатку видаляються, а потім
-     * встановлюються нові.
+     * Р—Р±РµСЂС–РіР°С” СЃС‚Р°РЅ РѕР±'С”РєС‚Сѓ obj РІ Р±Р°Р·С– РґР°РЅРёС….
+     * Р—Р°РїРёСЃРё Р· С‚Р°Р±Р»РёС†С–, СЏРєР° РјС–СЃС‚РёС‚СЊ Р°СЃРѕС†С–Р№РѕРІР°РЅС– СЃС‚Р°РЅС†С–С—
+     * Р· РїРµСЂРµРІС–Р·РЅРёРєРѕРј obj, СЃРїРѕС‡Р°С‚РєСѓ РІРёРґР°Р»СЏСЋС‚СЊСЃСЏ, Р° РїРѕС‚С–Рј
+     * РІСЃС‚Р°РЅРѕРІР»СЋСЋС‚СЊСЃСЏ РЅРѕРІС–.
      */
     @Override
     public void update(Carrier obj) throws PersistException {
@@ -148,9 +148,9 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
     }
 
     /**
-     * Створює записи у таблиці, яка представляє зв'язок <i>many to many</i> між
-     * {@link Carrier} та {@link Station}. Тобто асоціює об'єкт {@code obj} зі
-     * станціями, які він інкапсулює, у базі даних.
+     * РЎС‚РІРѕСЂСЋС” Р·Р°РїРёСЃРё Сѓ С‚Р°Р±Р»РёС†С–, СЏРєР° РїСЂРµРґСЃС‚Р°РІР»СЏС” Р·РІ'СЏР·РѕРє <i>many to many</i> РјС–Р¶
+     * {@link Carrier} С‚Р° {@link Station}. РўРѕР±С‚Рѕ Р°СЃРѕС†С–СЋС” РѕР±'С”РєС‚ {@code obj} Р·С–
+     * СЃС‚Р°РЅС†С–СЏРјРё, СЏРєС– РІС–РЅ С–РЅРєР°РїСЃСѓР»СЋС”, Сѓ Р±Р°Р·С– РґР°РЅРёС….
      */
     private void stationListInsert(Carrier obj) throws PersistException {
         String sql = "INSERT INTO timetable.Station_list (Carrier_id, Station_id) \n" +
@@ -167,7 +167,7 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         }
     }
 
-    /** Повертає список станцій з бази даних, що асоційовані з об'єктом {@code obj}. */
+    /** РџРѕРІРµСЂС‚Р°С” СЃРїРёСЃРѕРє СЃС‚Р°РЅС†С–Р№ Р· Р±Р°Р·Рё РґР°РЅРёС…, С‰Рѕ Р°СЃРѕС†С–Р№РѕРІР°РЅС– Р· РѕР±'С”РєС‚РѕРј {@code obj}. */
     private List<Station> stationListSelect(Carrier obj) throws PersistException {
         List<Station> stations = null;
         String sql = "SELECT Station_id FROM timetable.Station_list WHERE Carrier_id = ?";
@@ -185,7 +185,7 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         return stations;
     }
 
-    /** Видаляє список станцій з бази даних, що асоційовані з об'єктом {@code obj}. */
+    /** Р’РёРґР°Р»СЏС” СЃРїРёСЃРѕРє СЃС‚Р°РЅС†С–Р№ Р· Р±Р°Р·Рё РґР°РЅРёС…, С‰Рѕ Р°СЃРѕС†С–Р№РѕРІР°РЅС– Р· РѕР±'С”РєС‚РѕРј {@code obj}. */
     private int stationListDelete(Carrier obj) throws PersistException {
         int number;
         String sql = "DELETE FROM timetable.Station_list WHERE Carrier_id = ?;";

@@ -15,9 +15,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Реалізація інтерфейсу {@link DaoFactory} для бази даних MySql.
+ * Р РµР°Р»С–Р·Р°С†С–СЏ С–РЅС‚РµСЂС„РµР№СЃСѓ {@link DaoFactory} РґР»СЏ Р±Р°Р·Рё РґР°РЅРёС… MySql.
  *
- * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ * @author Р“РѕСЂРѕС… РћР»РµРєСЃР°РЅРґСЂ РЎРµСЂРіС–Р№РѕРІРёС‡, РіСЂ. Р†Рћ-31, Р¤Р†РћРў, РќРўРЈРЈ РљРџР†
  */
 public class MySqlDaoFactory implements DaoFactory<Connection> {
 
@@ -29,7 +29,7 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
 
     private MySqlDaoFactory() {
         try {
-            Class.forName(driver);              // Регістрація драйвера
+            Class.forName(driver);              // Р РµРіС–СЃС‚СЂР°С†С–СЏ РґСЂР°Р№РІРµСЂР°
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -67,10 +67,10 @@ public class MySqlDaoFactory implements DaoFactory<Connection> {
     }
 
     /**
-     * Cтворює підключення до MySql бази даних за заданими параметрами.
-     * @param url URL адреса бази даних
-     * @param user логін користувача бази даних
-     * @param password пароль користувача бази даних
+     * CС‚РІРѕСЂСЋС” РїС–РґРєР»СЋС‡РµРЅРЅСЏ РґРѕ MySql Р±Р°Р·Рё РґР°РЅРёС… Р·Р° Р·Р°РґР°РЅРёРјРё РїР°СЂР°РјРµС‚СЂР°РјРё.
+     * @param url URL Р°РґСЂРµСЃР° Р±Р°Р·Рё РґР°РЅРёС…
+     * @param user Р»РѕРіС–РЅ РєРѕСЂРёСЃС‚СѓРІР°С‡Р° Р±Р°Р·Рё РґР°РЅРёС…
+     * @param password РїР°СЂРѕР»СЊ РєРѕСЂРёСЃС‚СѓРІР°С‡Р° Р±Р°Р·Рё РґР°РЅРёС…
      */
     public Connection createContext(String url, String user, String password)
             throws PersistException {

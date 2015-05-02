@@ -5,7 +5,7 @@ import users.db.dao.GenericDao;
 import users.db.dao.PersistException;
 import users.db.entities.Category;
 import users.db.entities.UsersCategory;
-import users.db.util.Pair;
+import users.util.Pair;
 import users.db.entities.User;
 
 import java.sql.Connection;
@@ -15,10 +15,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Клас для управління зв'язком <i>many to many</i> між {@link User}
- * та {@link Category} у базі даних MySql.
+ * РљР»Р°СЃ РґР»СЏ СѓРїСЂР°РІР»С–РЅРЅСЏ Р·РІ'СЏР·РєРѕРј <i>many to many</i> РјС–Р¶ {@link User}
+ * С‚Р° {@link Category} Сѓ Р±Р°Р·С– РґР°РЅРёС… MySql.
  *
- * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ * @author Р“РѕСЂРѕС… РћР»РµРєСЃР°РЅРґСЂ РЎРµСЂРіС–Р№РѕРІРёС‡, РіСЂ. Р†Рћ-31, Р¤Р†РћРў, РќРўРЈРЈ РљРџР†
  */
 public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Integer, Integer>> {
 
@@ -111,7 +111,7 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
     }
 
     /**
-     * Дивись <b>see also</b>.
+     * Р”РёРІРёСЃСЊ <b>see also</b>.
      * @see AbstractJDBCDao#getCreateQuery()
      */
     public String getCreateQuery() {
@@ -120,7 +120,7 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
     }
 
     /**
-     * Дивись <b>see also</b>.
+     * Р”РёРІРёСЃСЊ <b>see also</b>.
      * @see AbstractJDBCDao#getSelectQuery()
      */
     public String getSelectQuery() {
@@ -128,7 +128,7 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
     }
 
     /**
-     * Дивись <b>see also</b>.
+     * Р”РёРІРёСЃСЊ <b>see also</b>.
      * @see AbstractJDBCDao#getDeleteQuery()
      */
     public String getDeleteQuery() {
@@ -136,7 +136,7 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
     }
 
     /**
-     * Дивись <b>see also</b>.
+     * Р”РёРІРёСЃСЊ <b>see also</b>.
      * @see AbstractJDBCDao#parseResultSet(ResultSet)
      */
     protected List<UsersCategory> parseResultSet(ResultSet rs) throws PersistException {
