@@ -29,13 +29,15 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         }
     }
 
+    private int counter = 0;
+
     public MySqlUserDao(Connection connection) {
         super(connection);
     }
 
     public User create() throws PersistException {
         User u = new User();
-        u.setEmail("blank");
+        u.setEmail("blank" + counter++);
         u.setPassword("1111");
         u.setCreate_date(new Date());
         u.setFirstName("None");
@@ -69,6 +71,31 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         return "DELETE FROM timetable.User WHERE id = ?;";
     }
 
+    /**
+     * ѕовертаЇ об'Їкт класу {@code User}, €кий в≥дпов≥даЇ запису з поштовою адресою
+     * {@code email} та паролем {@code password}. якщо такого запису немаЇ, повертаЇ {@code null}.
+     */
+    public User getByCredentials(String email, String password) throws PersistException {
+        List<User> list;
+        String sql = getSelectQuery() + " WHERE email = ? AND password = ?;";
+        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            stm.setString(1, email);
+            stm.setString(2, password);
+            ResultSet rs = stm.executeQuery();
+            list = parseResultSet(rs);
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        if (list == null || list.size() == 0) {
+            return null;
+        }
+        if (list.size() > 1) {
+            throw new PersistException("Receved more than one record.");
+        }
+        return list.iterator().next();
+    }
+
+
     @Override
     protected List<User> parseResultSet(ResultSet rs) throws PersistException {
         LinkedList<User> result = new LinkedList<>();
@@ -82,7 +109,10 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
                 user.setLastName(rs.getString("lastName"));
                 user.setFirstName(rs.getString("firstName"));
                 user.setAddress(rs.getString("address"));
-                user.setCarrier_id(rs.getInt("carrier_id"));
+                int carrier_id = rs.getInt("carrier_id");
+                if (carrier_id != 0) {
+                    user.setCarrier_id(carrier_id);
+                } else user.setCarrier_id(null);
                 result.add(user);
             }
         } catch (Exception e) {

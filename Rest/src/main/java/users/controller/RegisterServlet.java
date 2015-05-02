@@ -4,11 +4,11 @@ import users.db.dao.GenericDao;
 import users.db.dao.PersistException;
 import users.db.entities.User;
 import users.db.mysql.MySqlDaoFactory;
+import users.db.mysql.MySqlUserDao;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.Date;
 
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "Register", urlPatterns = { "/Register" })
+@WebServlet(name = "Register", urlPatterns = {"/Register" })
 public class RegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
@@ -28,7 +28,7 @@ public class RegisterServlet extends HttpServlet {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String lastName = request.getParameter("lastName");
-        String firstName = request.getParameter("firstParameter");
+        String firstName = request.getParameter("firstName");
         String address = request.getParameter("address");
         String errorMsg = null;
         if (email == null || email.equals("")) {
@@ -47,17 +47,17 @@ public class RegisterServlet extends HttpServlet {
             errorMsg = "Address can't be null or empty";
         }
 
-        if(errorMsg != null){
+        if(errorMsg != null) {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
-            PrintWriter out= response.getWriter();
+            PrintWriter out = response.getWriter();
             out.println("<font color=red>"+errorMsg+"</font>");
             rd.include(request, response);
         } else {
-
-            MySqlDaoFactory factory = new MySqlDaoFactory();
+            Connection con = (Connection) getServletContext().getAttribute("DBConnection");
+            MySqlDaoFactory factory = MySqlDaoFactory.getInstance();
             try {
-                GenericDao dao = factory.getDao(factory.getContext(), User.class);
-                User user = (User) dao.create();
+                MySqlUserDao dao = (MySqlUserDao) factory.getDao(con, User.class);
+                User user = new User();
                 user.setEmail(email);
                 user.setPassword(password);
                 user.setCreate_date(new Date());
@@ -65,15 +65,22 @@ public class RegisterServlet extends HttpServlet {
                 user.setLastName(lastName);
                 user.setAddress(address);
                 dao.persist(user);
+                //forward to login page to login
                 RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
-                PrintWriter out= response.getWriter();
+                PrintWriter out = response.getWriter();
                 out.println("<font color=green>Registration successful, please login below.</font>");
+                rd.include(request, response);
             } catch (PersistException e) {
-                throw new ServletException("DB Connection problem.");
+                try {
+                    SQLException sqlE = (SQLException) e.getCause();
+                    if(sqlE.getErrorCode() == 1062) { // код, який вказує на спробу копіювання унікальних полів
+                        RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
+                        PrintWriter out = response.getWriter();
+                        out.println("<font color=red>This email already exists</font>");
+                        rd.include(request, response);
+                    } else throw new ServletException("DB Connection problem ");
+                } catch (ClassCastException cce) {throw new ServletException("DB Connection problem ");}
             }
-
         }
-
     }
-
 }

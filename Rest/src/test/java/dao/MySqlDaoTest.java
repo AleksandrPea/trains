@@ -89,7 +89,7 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
         u.setPassword("1111");
         u.setFirstName("Aleksandr");
         u.setLastName("Pea");
-        u.setCreate_date(new Date(System.currentTimeMillis()));
+        u.setCreate_date(new Date());
         u.setAddress("Adress");
         return u;
     }
