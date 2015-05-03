@@ -7,7 +7,7 @@ import users.db.entities.Category;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,21 +38,40 @@ public class MySqlCategoryDao extends AbstractJDBCDao<Category, Integer> {
         return persist(g);
     }
 
+    /**
+     * Повертає ідентифікатор, який відповідає першому входженню
+     * імені {@code name} в таблиці Category, або {@code null}.
+     */
+    public Integer getFirstIdOf(String name) throws PersistException {
+        Integer id = null;
+        String sql = "SELECT id FROM timetable.Category WHERE name = ? LIMIT 1;";
+        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            stm.setString(1, name);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                id = rs.getInt("id");
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return id;
+    }
+
     @Override
     public String getCreateQuery() {
-        return "INSERT INTO timetable.Category (name) \n" +
-                "VALUES (?);";
+        return "INSERT INTO timetable.Category (name, parent_id) \n" +
+                "VALUES (?, ?);";
     }
 
     @Override
     public String getSelectQuery() {
-        return "SELECT id, name FROM timetable.Category";
+        return "SELECT id, name, parent_id FROM timetable.Category";
     }
 
     @Override
     public String getUpdateQuery() {
         return "UPDATE timetable.Category \n" +
-                "SET name = ? WHERE id = ?;";
+                "SET name = ?, parent_id = ? WHERE id = ?;";
     }
 
     @Override
@@ -62,12 +81,16 @@ public class MySqlCategoryDao extends AbstractJDBCDao<Category, Integer> {
 
     @Override
     protected List<Category> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<Category> result = new LinkedList<>();
+        ArrayList<Category> result = new ArrayList<>();
         try {
             while (rs.next()) {
                 PersistCategory category = new PersistCategory();
                 category.setId(rs.getInt("id"));
                 category.setName(rs.getString("name"));
+                int parent_id = rs.getInt("parent_id");
+                if (parent_id != 0) {
+                    category.setParent_id(parent_id);
+                } else category.setParent_id(null);
                 result.add(category);
             }
         } catch (Exception e) {
@@ -81,6 +104,9 @@ public class MySqlCategoryDao extends AbstractJDBCDao<Category, Integer> {
             throws PersistException {
         try {
             stm.setString(1, obj.getName());
+            if (obj.getParent_id() != null) {
+                stm.setInt(2, obj.getParent_id());
+            } else stm.setNull(2, java.sql.Types.INTEGER);
         } catch (Exception e) {
             throw new PersistException(e);
         }
@@ -91,7 +117,10 @@ public class MySqlCategoryDao extends AbstractJDBCDao<Category, Integer> {
             throws PersistException {
         try {
             stm.setString(1, obj.getName());
-            stm.setInt(2, obj.getId());
+            if (obj.getParent_id() != null) {
+                stm.setInt(2, obj.getParent_id());
+            } else stm.setNull(2, java.sql.Types.INTEGER);
+            stm.setInt(3, obj.getId());
         } catch (Exception e) {
             throw new PersistException(e);
         }

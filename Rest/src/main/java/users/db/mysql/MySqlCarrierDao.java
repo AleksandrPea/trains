@@ -9,7 +9,7 @@ import users.db.entities.Carrier;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,7 +38,7 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         Carrier c = new Carrier();
         c.setInfo("None");
         c.setTariff("-");
-        c.setStations(new LinkedList<Station>());
+        c.setStations(new ArrayList<Station>());
         return persist(c);
     }
 
@@ -109,7 +109,7 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
 
     @Override
     protected List<Carrier> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<Carrier> result = new LinkedList<>();
+        ArrayList<Carrier> result = new ArrayList<>();
         try {
             while (rs.next()) {
                 PersistCarrier carrier = new PersistCarrier();
@@ -173,7 +173,7 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         String sql = "SELECT Station_id FROM timetable.Station_list WHERE Carrier_id = ?";
         try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
             stm.setInt(1, obj.getId());
-            stations = new LinkedList<>();
+            stations = new ArrayList<>();
             ResultSet result = stm.executeQuery();
             while (result.next()) {
                 stations.add((Station) Database.get(Station.class, result.getInt("Station_id")));

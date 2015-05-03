@@ -11,7 +11,7 @@ import users.db.entities.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +32,28 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
     public UsersCategory create() throws PersistException {
         UsersCategory g = new UsersCategory();
         return g;
+    }
+
+    /**
+     * Повертає множину об'єктів класу {@link Category}, до яких має
+     * відношення об'єкт {@code user}.
+     */
+    public List<Category> getCategoriesOf(User user) throws PersistException {
+        List<Category> list = new ArrayList<>();
+        MySqlCategoryDao dao = (MySqlCategoryDao) MySqlDaoFactory.
+                getInstance().getDao(connection, Category.class);
+        String sql = "SELECT category_id FROM timetable.Users_Category WHERE user_id = ?;";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, user.getId());
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Category category = dao.getByPK(rs.getInt("category_id"));
+                list.add(category);
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return list;
     }
 
     @Override
@@ -140,7 +162,7 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
      * @see AbstractJDBCDao#parseResultSet(ResultSet)
      */
     protected List<UsersCategory> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<UsersCategory> result = new LinkedList<>();
+        ArrayList<UsersCategory> result = new ArrayList<>();
         try {
             while (rs.next()) {
                 UsersCategory usersC = new UsersCategory();

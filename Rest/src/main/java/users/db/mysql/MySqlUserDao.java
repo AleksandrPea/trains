@@ -7,8 +7,9 @@ import users.db.entities.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Date;
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -29,7 +30,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         }
     }
 
-    private static int counter = 0;
+    private int counter = 0;
 
     public MySqlUserDao(Connection connection) {
         super(connection);
@@ -63,7 +64,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
     public String getUpdateQuery() {
         return "UPDATE timetable.User \n" +
                 "SET email = ?, password = ?, create_date = ?, lastName = ?, firstName = ?," +
-                "address = ? carrier_id = ? WHERE id = ?;";
+                " address = ?, carrier_id = ? WHERE id = ?;";
     }
 
     @Override
@@ -98,7 +99,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     @Override
     protected List<User> parseResultSet(ResultSet rs) throws PersistException {
-        LinkedList<User> result = new LinkedList<>();
+        ArrayList<User> result = new ArrayList<>();
         try {
             while (rs.next()) {
                 PersistUser user = new PersistUser();
@@ -163,5 +164,14 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             return null;
         }
         return new java.sql.Date(date.getTime());
+    }
+
+    {
+        String sql = "DELETE FROM timetable.User WHERE email LIKE 'blank%';";
+        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            stm.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: User
-  Date: 02.05.2015
-  Time: 12:06
+  Date: 03.05.2015
+  Time: 15:54
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,6 +11,6 @@
     <title></title>
 </head>
 <body>
-  Hello carrier!
+
 </body>
 </html>

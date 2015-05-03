@@ -1,19 +1,17 @@
 package users.controller;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import users.db.dao.GenericDao;
 import users.db.dao.PersistException;
 import users.db.entities.Carrier;
+import users.db.entities.Category;
 import users.db.entities.User;
-import users.db.mysql.MySqlCarrierDao;
-import users.db.mysql.MySqlDaoFactory;
-import users.db.mysql.MySqlUserDao;
+import users.db.entities.UsersCategory;
+import users.db.mysql.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
@@ -22,7 +20,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 @WebServlet(name = "Register", urlPatterns = {"/Register" })
 public class RegisterServlet extends HttpServlet {
@@ -39,7 +36,7 @@ public class RegisterServlet extends HttpServlet {
         String tariff = null;
         String info = null;
         String[] category = request.getParameterValues("category");
-        if (category != null && category.equals("carrier")) {
+        if (category != null && category[0].equals("carrier")) {
             isCarrier = true;
             tariff = request.getParameter("tariff");
             info = request.getParameter("info");
@@ -74,6 +71,7 @@ public class RegisterServlet extends HttpServlet {
             Connection con = (Connection) getServletContext().getAttribute("DBConnection");
             MySqlDaoFactory factory = MySqlDaoFactory.getInstance();
             try {
+                con.setAutoCommit(false);            // Робимо транзакцію
                 MySqlUserDao udao = (MySqlUserDao) factory.getDao(con, User.class);
                 User user = udao.create();
                 user.setPassword(password);
@@ -83,30 +81,46 @@ public class RegisterServlet extends HttpServlet {
                 user.setAddress(address);
 
                 if (isCarrier) {
-                    MySqlCarrierDao cdao = (MySqlCarrierDao) factory.getDao(con, Carrier.class);
-                    Carrier carrier = cdao.create();
+                    GenericDao dao = factory.getDao(con, Carrier.class);
+                    Carrier carrier = (Carrier) dao.create();
                     carrier.setTariff(tariff);
                     carrier.setInfo(info);
-                    cdao.update(carrier);
+                    dao.update(carrier);
                     user.setCarrier_id(carrier.getId());
+                    // Встановлюємо асоціацію
+                    MySqlCategoryDao cdao = (MySqlCategoryDao) factory.getDao(con, Category.class);
+                    dao = factory.getDao(con, UsersCategory.class);
+                    UsersCategory uc = (UsersCategory) dao.create();
+                    uc.setCategory_id(cdao.getFirstIdOf("Carrier"));
+                    uc.setUser_id(user.getId());
+                    dao.persist(uc);
                 }
                 user.setEmail(email);
                 udao.update(user);
-                //forward to login page to login
+                con.commit();
+                // Посилаємо на сторінку login
                 RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
                 PrintWriter out = response.getWriter();
                 out.println("<font color=green>Registration successful, please login below.</font>");
                 rd.include(request, response);
+            } catch (SQLException e) {
+                throw new ServletException("DB Connection problem ");
             } catch (PersistException e) {
                 try {
                     SQLException sqlE = (SQLException) e.getCause();
-                    if(sqlE.getErrorCode() == 1062) { // код, що свідчить про намагання копіювання унікального поля
+                    if(sqlE.getErrorCode() == 1062) { // Код, що свідчить про намагання копіювання унікального поля
                         RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
                         PrintWriter out = response.getWriter();
                         out.println("<font color=red>This email already exists</font>");
                         rd.include(request, response);
-                    } else throw new ServletException("DB Connection problem " + sqlE.getMessage());
+                    } else throw new ServletException("DB Connection problem ");
                 } catch (ClassCastException cce) {throw new ServletException("DB Connection problem ");}
+            } finally {
+                try {
+                    con.setAutoCommit(true);
+                } catch (SQLException e) {
+                    throw new ServletException("DB Connection problem ");
+                }
             }
         }
     }

@@ -79,7 +79,7 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
 
     public static Category createTestCategory() {
         Category c = new Category();
-        c.setName("Перевозчик");
+        c.setName("category");
         return c;
     }
 

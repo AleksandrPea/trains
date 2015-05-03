@@ -16,8 +16,7 @@ import javax.servlet.http.HttpSession;
 @WebFilter("/AuthenticationFilter")
 public class AuthenticationFilter implements Filter {
 
-    public void init(FilterConfig fConfig) throws ServletException {
-    }
+    public void init(FilterConfig fConfig) throws ServletException {}
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
 
@@ -33,12 +32,10 @@ public class AuthenticationFilter implements Filter {
             System.out.println(("Unauthorized access request"));
             res.sendRedirect("login.html");
         } else {
-            // pass the request along the filter chain
+
             chain.doFilter(request, response);
         }
     }
 
-    public void destroy() {
-        //close any resources here
-    }
+    public void destroy() {}
 }

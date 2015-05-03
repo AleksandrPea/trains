@@ -26,7 +26,7 @@ public class LogoutServlet extends HttpServlet {
                 }
             }
         }
-        //invalidate the session if exists
+        // Анулюємо сесію, якщо вона існує.
         HttpSession session = request.getSession(false);
         if(session != null){
             session.invalidate();
