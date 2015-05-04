@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 @WebServlet("/AppErrorHandler")
+@Deprecated
 public class AppErrorHandler extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
