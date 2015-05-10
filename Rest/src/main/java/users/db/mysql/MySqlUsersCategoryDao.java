@@ -119,6 +119,22 @@ public class MySqlUsersCategoryDao implements GenericDao<UsersCategory, Pair<Int
         }
     }
 
+    /**
+     * Видаляє категорії з бази даних, до яких мав відношення {@code obj}.
+     * @return кількіть видалених записів.
+     */
+    public int deleteUserCategories(User obj) throws PersistException {
+        int number;
+        String sql = "DELETE FROM timetable.Users_category WHERE User_id = ?;";
+        try (PreparedStatement stm = connection.prepareStatement(sql)) {
+            stm.setInt(1, obj.getId());
+            number = stm.executeUpdate();
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return number;
+    }
+
     @Override
     public List<UsersCategory> getAll() throws PersistException {
         List<UsersCategory> list;

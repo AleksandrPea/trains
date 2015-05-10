@@ -1,8 +1,11 @@
 package ORMroad;
 
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.LogicalExpression;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.*;
@@ -52,7 +55,8 @@ public class Database {
 		session.close();
 	}
 	public static Object get(Class clas , Integer id) {
-		Session session = HibernateUtil.getSessionFactory().getCurrentSession();
+        Session session;
+        session = HibernateUtil.getSessionFactory().getCurrentSession();
 		Transaction tx = session.beginTransaction();
 		Object result = session.get(clas, id);
 		tx.commit();
@@ -113,9 +117,35 @@ public class Database {
 		try {
 		return session.createCriteria(Station.class).add(
 				Restrictions.like("name", name + "%")).list();
-		} finally { session.close();}
+		} finally {
+            session.close();
+        }
 	}
-	
+
+    public static List<Station> getFilteredStation(String name, List<Station> filter) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            Criteria cr = session.createCriteria(Station.class).addOrder(Order.asc("name")).add(
+                    Restrictions.like("name", name + "%"));
+            for (Station station : filter) {
+                cr.add(Restrictions.ne("name", station.getName()));
+            }
+            return cr.list();
+        } finally {
+            session.close();
+        }
+    }
+
+    public static List<Station> getSortedStation(String name) {
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        try {
+            return session.createCriteria(Station.class).addOrder(Order.asc("name")).add(
+                    Restrictions.like("name", name + "%")).list();
+        } finally {
+            session.close();
+        }
+    }
+
 	public static List getRoute(String name) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		try {

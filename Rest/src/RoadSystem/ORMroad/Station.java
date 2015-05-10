@@ -55,4 +55,12 @@ public class Station implements java.io.Serializable {
 		this.waypoints = waypoints;
 	}
 
+    @Override
+    public boolean equals(Object obj) {
+        boolean result = false;
+        if (obj instanceof Station && ((Station) obj).getStationId().equals(stationId)) {
+            result = true;
+        }
+        return result;
+    }
 }

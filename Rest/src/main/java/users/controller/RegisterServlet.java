@@ -65,7 +65,9 @@ public class RegisterServlet extends HttpServlet {
         if(errorMsg != null) {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
             PrintWriter out = response.getWriter();
-            out.println("<font color=red>"+errorMsg+"</font>");
+            out.println("<div class=\"container\">\n<div class=\"alert alert-warning fade in\">");
+            out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
+            out.println(errorMsg + "\n</div>\n</div>");
             rd.include(request, response);
         } else {
             Connection con = (Connection) getServletContext().getAttribute("DBConnection");
@@ -79,7 +81,8 @@ public class RegisterServlet extends HttpServlet {
                 user.setFirstName(firstName);
                 user.setLastName(lastName);
                 user.setAddress(address);
-
+                user.setEmail(email);
+                udao.update(user);
                 if (isCarrier) {
                     GenericDao dao = factory.getDao(con, Carrier.class);
                     Carrier carrier = (Carrier) dao.create();
@@ -94,27 +97,41 @@ public class RegisterServlet extends HttpServlet {
                     uc.setCategory_id(cdao.getFirstIdOf("Carrier"));
                     uc.setUser_id(user.getId());
                     dao.persist(uc);
+                    udao.update(user);
                 }
-                user.setEmail(email);
-                udao.update(user);
                 con.commit();
                 // Посилаємо на сторінку login
                 RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
                 PrintWriter out = response.getWriter();
-                out.println("<font color=green>Registration successful, please login below.</font>");
+                out.println("<div class=\"container\">\n<div class=\"alert alert-success fade in\">");
+                out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
+                out.println("Registration successful, please login below\n</div>\n</div>");
                 rd.include(request, response);
             } catch (SQLException e) {
+                try {
+                    con.rollback();
+                } catch (SQLException e2) {
+                    throw new ServletException("DB Connection problem ");
+                }
                 throw new ServletException("DB Connection problem ");
             } catch (PersistException e) {
                 try {
+                    con.rollback();
+                } catch (SQLException e2) {
+                    throw new ServletException("DB Connection problem ");
+                }
+                if (e.getCause() instanceof SQLException) {
                     SQLException sqlE = (SQLException) e.getCause();
                     if(sqlE.getErrorCode() == 1062) { // Код, що свідчить про намагання копіювання унікального поля
                         RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
                         PrintWriter out = response.getWriter();
-                        out.println("<font color=red>This email already exists</font>");
+                        out.println("<font color=red></font>");
+                        out.println("<div class=\"container\">\n<div class=\"alert alert-warning fade in\">");
+                        out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
+                        out.println("This email already exists\n</div>\n</div>");
                         rd.include(request, response);
-                    } else throw new ServletException("DB Connection problem ");
-                } catch (ClassCastException cce) {throw new ServletException("DB Connection problem ");}
+                    }
+                } else throw new ServletException("DB Connection problem ");
             } finally {
                 try {
                     con.setAutoCommit(true);

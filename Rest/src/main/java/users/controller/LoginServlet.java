@@ -1,9 +1,12 @@
 package users.controller;
 
+import ORMroad.Station;
 import users.db.dao.PersistException;
+import users.db.entities.Carrier;
 import users.db.entities.Category;
 import users.db.entities.User;
 import users.db.entities.UsersCategory;
+import users.db.mysql.MySqlCarrierDao;
 import users.db.mysql.MySqlDaoFactory;
 import users.db.mysql.MySqlUserDao;
 import users.db.mysql.MySqlUsersCategoryDao;
@@ -11,6 +14,7 @@ import users.db.mysql.MySqlUsersCategoryDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +46,9 @@ public class LoginServlet extends HttpServlet {
         if(errorMsg != null) {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
             PrintWriter out= response.getWriter();
-            out.println("<font color=red>"+errorMsg+"</font>");
+            out.println("<div class=\"container\">\n<div class=\"alert alert-warning fade in\">");
+            out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
+            out.println(errorMsg + "\n</div>\n</div>");
             rd.include(request, response);
         } else {
             Connection con = (Connection) getServletContext().getAttribute("DBConnection");
@@ -60,16 +66,28 @@ public class LoginServlet extends HttpServlet {
                     HttpSession session = request.getSession();
                     session.setAttribute("user", user);
                     session.setAttribute("categories", names);
+                    if (user.getCarrier_id() != null) {
+                        MySqlCarrierDao cardao = (MySqlCarrierDao) factory.getDao(con, Carrier.class);
+                        Carrier carrier = cardao.getByPK(user.getCarrier_id());
+                        carrier.getStations().sort(new Comparator<Station>() {
+                            @Override
+                            public int compare(Station o1, Station o2) {
+                                return o1.getName().compareToIgnoreCase(o2.getName());
+                            }
+                        });
+                        session.setAttribute("carrier", carrier);
+                    }
                     response.sendRedirect("home.jsp");
                 } else {
                     RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
                     PrintWriter out = response.getWriter();
                     System.out.println(("User not found with email=" + email));
-                    out.println("<font color=red>No user found with given email id, please register first.</font>");
+                    out.println("<div class=\"container\">\n<div class=\"alert alert-warning fade in\">");
+                    out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
+                    out.println("No user found with given email id, please register first\n</div>\n</div>");
                     rd.include(request, response);
                 }
             } catch (PersistException e) {
-                e.printStackTrace();
                 throw new ServletException("DB Connection problem.");
             }
         }

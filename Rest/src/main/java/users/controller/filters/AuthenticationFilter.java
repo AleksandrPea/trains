@@ -1,6 +1,7 @@
 package users.controller.filters;
 
 import java.io.IOException;
+import java.util.Set;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -30,9 +31,8 @@ public class AuthenticationFilter implements Filter {
 
         if(session == null && !(uri.endsWith("html") || uri.endsWith("Login") || uri.endsWith("Register"))){
             System.out.println(("Unauthorized access request"));
-            res.sendRedirect("login.html");
+            res.sendRedirect("/1111/login.html");
         } else {
-
             chain.doFilter(request, response);
         }
     }

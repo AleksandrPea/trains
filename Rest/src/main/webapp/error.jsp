@@ -27,8 +27,8 @@
         <h3>Error Details</h3>
         <strong>Status Code</strong>:<%=statusCode%><br>
         <strong>Requested URI</strong>:<%=requestUri%><br>
-    </div>
 <%}else {%>
+<div class="container">
     <h3>Exception Details</h3>
     <ul class="list-group">
         <li class="list-group-item">Servlet Name:<%=servletName%></li>
@@ -39,5 +39,6 @@
 <%}%>
 <br>
 <a href="login.html">Login Page</a>
+</div>
 </body>
 </html>

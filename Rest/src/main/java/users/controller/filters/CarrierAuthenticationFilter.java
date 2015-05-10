@@ -27,10 +27,8 @@ public class CarrierAuthenticationFilter implements Filter {
         System.out.println("Requested Resource::" + uri);
 
         HttpSession session = req.getSession(false);
-        Set<String> categories = (Set<String>) session.getAttribute("categories");
-        boolean isCarrier = categories.contains("Carrier");
-        session.setAttribute("isCarrier", new Boolean(isCarrier));
-        if (!isCarrier) {
+
+        if (session.getAttribute("carrier") == null) {
             System.out.println(("Unauthorized carrier access request"));
             res.sendRedirect("/1111/home.jsp");
         } else {

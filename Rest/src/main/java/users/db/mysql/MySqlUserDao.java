@@ -2,7 +2,9 @@ package users.db.mysql;
 
 import users.db.dao.AbstractJDBCDao;
 import users.db.dao.PersistException;
+import users.db.entities.Carrier;
 import users.db.entities.User;
+import users.db.entities.UsersCategory;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -38,13 +40,21 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
 
     public User create() throws PersistException {
         User u = new User();
-        u.setEmail("blank" + counter++);
+        u.setEmail("blank" + counter++ + "-" + hashCode());
         u.setPassword("1111");
         u.setCreate_date(new Date());
         u.setFirstName("None");
         u.setLastName("None");
         u.setAddress("None");
         return persist(u);
+    }
+
+    @Override
+    public void delete(User obj) throws PersistException {
+        MySqlUsersCategoryDao dao = (MySqlUsersCategoryDao) MySqlDaoFactory.getInstance()
+                .getDao(getConnection(), UsersCategory.class);
+        dao.deleteUserCategories(obj);
+        super.delete(obj);
     }
 
     @Override
@@ -95,7 +105,6 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         }
         return list.iterator().next();
     }
-
 
     @Override
     protected List<User> parseResultSet(ResultSet rs) throws PersistException {
@@ -167,6 +176,7 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
     }
 
     {
+        // Очистка непотрібних записів, що були створені методом persist
         String sql = "DELETE FROM timetable.User WHERE email LIKE 'blank%';";
         try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
             stm.execute();
@@ -174,4 +184,5 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             e.printStackTrace();
         }
     }
+
 }
