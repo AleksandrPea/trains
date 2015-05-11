@@ -21,6 +21,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Здійснює регістрацію користувача, заносячи дані до бази даних.
+ * Іншими словами, оброблює запит користувача на сторінці {@code /register.html}.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ */
 @WebServlet(name = "Register", urlPatterns = {"/Register" })
 public class RegisterServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -65,7 +71,7 @@ public class RegisterServlet extends HttpServlet {
         if(errorMsg != null) {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
             PrintWriter out = response.getWriter();
-            out.println("<div class=\"container\">\n<div class=\"alert alert-warning fade in\">");
+            out.println("<div class=\"container\">\n<br><div class=\"alert alert-warning fade in\">");
             out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
             out.println(errorMsg + "\n</div>\n</div>");
             rd.include(request, response);
@@ -94,7 +100,7 @@ public class RegisterServlet extends HttpServlet {
                     MySqlCategoryDao cdao = (MySqlCategoryDao) factory.getDao(con, Category.class);
                     dao = factory.getDao(con, UsersCategory.class);
                     UsersCategory uc = (UsersCategory) dao.create();
-                    uc.setCategory_id(cdao.getFirstIdOf("Carrier"));
+                    uc.setCategory_id(cdao.getFirstOf("Carrier").getId());
                     uc.setUser_id(user.getId());
                     dao.persist(uc);
                     udao.update(user);
@@ -103,7 +109,7 @@ public class RegisterServlet extends HttpServlet {
                 // Посилаємо на сторінку login
                 RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
                 PrintWriter out = response.getWriter();
-                out.println("<div class=\"container\">\n<div class=\"alert alert-success fade in\">");
+                out.println("<div class=\"container\">\n<br><div class=\"alert alert-success fade in\">");
                 out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
                 out.println("Registration successful, please login below\n</div>\n</div>");
                 rd.include(request, response);
@@ -125,8 +131,7 @@ public class RegisterServlet extends HttpServlet {
                     if(sqlE.getErrorCode() == 1062) { // Код, що свідчить про намагання копіювання унікального поля
                         RequestDispatcher rd = getServletContext().getRequestDispatcher("/register.html");
                         PrintWriter out = response.getWriter();
-                        out.println("<font color=red></font>");
-                        out.println("<div class=\"container\">\n<div class=\"alert alert-warning fade in\">");
+                        out.println("<div class=\"container\"><br>\n<div class=\"alert alert-warning fade in\">");
                         out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
                         out.println("This email already exists\n</div>\n</div>");
                         rd.include(request, response);

@@ -86,6 +86,22 @@ public class MySqlCarrierDao extends AbstractJDBCDao<Carrier, Integer> {
         return list;
     }
 
+    /**
+     * Визначає, чи має відношення перевізник {@code obj} до станції {@code station}.
+     * @return {@code true} якщо перевізник має асоціацію зі станцією, інакше - {@code false}.
+     */
+    public boolean hasStation(Carrier obj, Station station) throws PersistException {
+        String sql = "SELECT Station_id FROM timetable.Station_list " +
+                "WHERE Carrier_id = ? AND Station_id = ?";
+        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            stm.setInt(1, obj.getId());
+            stm.setInt(2, station.getStationId());
+            return stm.executeQuery().first();
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+    }
+
     @Override
     public String getCreateQuery() {
         return "INSERT INTO timetable.Carrier (tariff, info) \nVALUES (?, ?);";

@@ -4,7 +4,6 @@ import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -131,16 +130,6 @@ public class Database {
                 cr.add(Restrictions.ne("name", station.getName()));
             }
             return cr.list();
-        } finally {
-            session.close();
-        }
-    }
-
-    public static List<Station> getSortedStation(String name) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        try {
-            return session.createCriteria(Station.class).addOrder(Order.asc("name")).add(
-                    Restrictions.like("name", name + "%")).list();
         } finally {
             session.close();
         }

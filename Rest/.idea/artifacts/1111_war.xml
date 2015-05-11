@@ -3,6 +3,11 @@
     <output-path>$PROJECT_DIR$/target</output-path>
     <root id="archive" name="1111.war">
       <element id="artifact" artifact-name="1111:war exploded" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="lib">
+          <element id="file-copy" path="$PROJECT_DIR$/../updater/jsr311-api-1.1.jar" />
+        </element>
+      </element>
     </root>
   </artifact>
 </component>

@@ -39,22 +39,22 @@ public class MySqlCategoryDao extends AbstractJDBCDao<Category, Integer> {
     }
 
     /**
-     * Повертає ідентифікатор, який відповідає першому входженню
+     * Повертає категорію, яка відповідає першому входженню
      * імені {@code name} в таблиці Category, або {@code null}.
      */
-    public Integer getFirstIdOf(String name) throws PersistException {
-        Integer id = null;
+    public Category getFirstOf(String name) throws PersistException {
+        Category category = null;
         String sql = "SELECT id FROM timetable.Category WHERE name = ? LIMIT 1;";
         try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
             stm.setString(1, name);
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
-                id = rs.getInt("id");
+                category = getByPK(rs.getInt("id"));
             }
         } catch (Exception e) {
             throw new PersistException(e);
         }
-        return id;
+        return category;
     }
 
     @Override

@@ -27,11 +27,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+/**
+ * Здійснює автентифікацію та авторизацію користувача у систему. Якщо заповнені поштовий адрес
+ * та пароль вірні, то створюється об'єкт класу {@code HttpSession} для кожного користувача.
+ * У кожній сесії будуть наступні атрибути:
+ * <ul>
+ *  <li>{@code user} - об'єкт класу {@code User}, що ідентифікує користувача;</li>
+ *  <li>{@code carrier} - об'єкт класу {@code Carrier}, якщо користувач - перевізник;</li>
+ *  <li>{@code categories} - множину імен категорій, до яких відноситься користувач.</li>
+ * </ul><br>
+ * Анулювати сессію можна за допомогою сервлети {@link LogoutServlet}.
+ *
+ * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
+ */
 @WebServlet(name = "Login", urlPatterns = { "/Login" })
 public class LoginServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         String errorMsg = null;
@@ -46,7 +60,7 @@ public class LoginServlet extends HttpServlet {
         if(errorMsg != null) {
             RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
             PrintWriter out= response.getWriter();
-            out.println("<div class=\"container\">\n<div class=\"alert alert-warning fade in\">");
+            out.println("<div class=\"container\"><br>\n<div class=\"alert alert-warning fade in\">");
             out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
             out.println(errorMsg + "\n</div>\n</div>");
             rd.include(request, response);
@@ -82,7 +96,7 @@ public class LoginServlet extends HttpServlet {
                     RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.html");
                     PrintWriter out = response.getWriter();
                     System.out.println(("User not found with email=" + email));
-                    out.println("<div class=\"container\">\n<div class=\"alert alert-warning fade in\">");
+                    out.println("<div class=\"container\"><br>\n<div class=\"alert alert-warning fade in\">");
                     out.println("<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>");
                     out.println("No user found with given email id, please register first\n</div>\n</div>");
                     rd.include(request, response);

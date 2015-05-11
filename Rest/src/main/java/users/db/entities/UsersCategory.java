@@ -12,8 +12,8 @@ import users.util.Pair;
 
 public class UsersCategory implements Identified<Pair<Integer, Integer>> {
 
-    private Integer user_id;
-    private Integer category_id;
+    private Integer user_id = null;
+    private Integer category_id = null;
 
     public Integer getCategory_id() {
         return category_id;
@@ -35,7 +35,11 @@ public class UsersCategory implements Identified<Pair<Integer, Integer>> {
 
     @Override
     public Pair<Integer, Integer> getId() {
-        return new Pair<>("user_id", getUser_id(),
-                "category_id", getCategory_id());
+        Pair<Integer, Integer> id = null;
+        if (user_id != null && category_id != null) {
+            id = new Pair<>("user_id", getUser_id(),
+                    "category_id", getCategory_id());
+        }
+        return id;
     }
 }

@@ -96,7 +96,7 @@ public class MySqlDaoTest extends GenericDaoTest<Connection> {
 
     public static UsersCategory createTestUsersCategory() {
         UsersCategory uc = new UsersCategory();
-        uc.setUser_id(1);
+        uc.setUser_id(3);
         uc.setCategory_id(1);
         return uc;
     }

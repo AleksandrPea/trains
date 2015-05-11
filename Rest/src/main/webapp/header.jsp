@@ -20,13 +20,13 @@
     <div>
       <ul class="nav navbar-nav">
         <li><a href="/1111/home.jsp">Home</a></li>
-        <li><a href="#">Page 1</a></li>
-        <li><a href="#">Page 2</a></li>
+        <li><a href="/1111/search.jsp">Search for carriers</a></li>
         <c:if test="${sessionScope.carrier != null}">
           <li>
-            <a href="/1111/carrier/manage.jsp">Manage stations <sup><span class="label label-info">Carrier</span></sup></a>
+            <a href="/1111/carrier/manage.jsp">Manage stations <sup><span class="label label-default">Carrier</span></sup></a>
           </li>
         </c:if>
+        <li><a href="#">About us</a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li>

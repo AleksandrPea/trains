@@ -3,6 +3,7 @@ package users.db.mysql;
 import users.db.dao.AbstractJDBCDao;
 import users.db.dao.PersistException;
 import users.db.entities.Carrier;
+import users.db.entities.Category;
 import users.db.entities.User;
 import users.db.entities.UsersCategory;
 
@@ -57,29 +58,20 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
         super.delete(obj);
     }
 
-    @Override
-    public String getCreateQuery() {
-        return "INSERT INTO timetable.User (email, password, create_date, lastName," +
-                "firstName, address, carrier_id) \n" +
-                "VALUES (?, ?, ?, ?, ?, ?, ?);";
-    }
-
-    @Override
-    public String getSelectQuery() {
-        return "SELECT id, email, password, create_date, lastName, firstName, address," +
-                "carrier_id FROM timetable.User";
-    }
-
-    @Override
-    public String getUpdateQuery() {
-        return "UPDATE timetable.User \n" +
-                "SET email = ?, password = ?, create_date = ?, lastName = ?, firstName = ?," +
-                " address = ?, carrier_id = ? WHERE id = ?;";
-    }
-
-    @Override
-    public String getDeleteQuery() {
-        return "DELETE FROM timetable.User WHERE id = ?;";
+    /** Повертає список користувачів, які відносяться до категорії {@code category}.*/
+    public List<User> getByCategory(Category category) throws PersistException {
+        List<User> list = new ArrayList<>();
+        String sql = "SELECT user_id FROM timetable.users_category WHERE category_id = ?;";
+        try (PreparedStatement stm = getConnection().prepareStatement(sql)) {
+            stm.setInt(1, category.getId());
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                list.add(getByPK(rs.getInt("user_id")));
+            }
+        } catch (Exception e) {
+            throw new PersistException(e);
+        }
+        return list;
     }
 
     /**
@@ -104,6 +96,31 @@ public class MySqlUserDao extends AbstractJDBCDao<User, Integer> {
             throw new PersistException("Receved more than one record.");
         }
         return list.iterator().next();
+    }
+
+    @Override
+    public String getCreateQuery() {
+        return "INSERT INTO timetable.User (email, password, create_date, lastName," +
+                "firstName, address, carrier_id) \n" +
+                "VALUES (?, ?, ?, ?, ?, ?, ?);";
+    }
+
+    @Override
+    public String getSelectQuery() {
+        return "SELECT id, email, password, create_date, lastName, firstName, address," +
+                "carrier_id FROM timetable.User";
+    }
+
+    @Override
+    public String getUpdateQuery() {
+        return "UPDATE timetable.User \n" +
+                "SET email = ?, password = ?, create_date = ?, lastName = ?, firstName = ?," +
+                " address = ?, carrier_id = ? WHERE id = ?;";
+    }
+
+    @Override
+    public String getDeleteQuery() {
+        return "DELETE FROM timetable.User WHERE id = ?;";
     }
 
     @Override

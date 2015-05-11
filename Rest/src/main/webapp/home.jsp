@@ -1,4 +1,3 @@
-<%@ page import="users.db.entities.User"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,10 +14,17 @@
 <body>
 <%@include file="header.jsp"%>
 <div class="container">
-  <%User user = (User) session.getAttribute("user"); %>
-  <h3>Hi <%=user.getFirstName() %></h3>
-  <strong>Your Email</strong>: <%=user.getEmail() %><br>
-  <strong>Your Address</strong>: <%=user.getAddress() %><br>
+  <h3>Welcome ${sessionScope.user.firstName} ${sessionScope.user.lastName}</h3>
+  <strong>Your Email</strong>: ${sessionScope.user.email}<br>
+  <strong>Your Address</strong>: ${sessionScope.user.address}<br>
+  <c:if test="${sessionScope.carrier != null}">
+    <strong>Tariff</strong>: ${sessionScope.carrier.tariff}<br>
+    <strong>Info</strong>: ${sessionScope.carrier.info}<br>
+  </c:if>
+  <strong>Date of registration</strong>: ${sessionScope.user.create_date}<br><br>
+  <a href="edit.jsp" class="btn btn-default">
+    <span class="glyphicon glyphicon-edit"></span> Edit
+  </a>
 </div>
 </body>
 </html>

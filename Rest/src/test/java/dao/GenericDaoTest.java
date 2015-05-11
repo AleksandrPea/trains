@@ -76,7 +76,6 @@ public abstract class GenericDaoTest<Context> {
     public void testGetAll() throws Exception {
         List list = dao().getAll();
         Assert.assertNotNull(list);
-        System.out.println(list.size());
         Assert.assertTrue(list.size() > 0);
     }
 

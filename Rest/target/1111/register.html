@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script>
+    function showOrHide(cb, cat) {
+      cb = document.getElementById(cb);
+      cat = document.getElementById(cat);
+      if (cb.checked) cat.style.display = "block";
+      else cat.style.display = "none";
+    }
+  </script>
+  <title>Register Page</title>
+</head>
+<body>
+<div class="container">
+  <h3>Provide all the fields for registration</h3><br>
+  <form action="Register" method="post" id ="usrform" class="form-horizontal" role="form">
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="firstName">First name:</label>
+      <div class="col-sm-10">
+        <input type="text" name="firstName" id="firstName" class="form-control">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="email">Email:</label>
+      <div class="col-sm-10">
+        <input type="email" name="email" id="email" class="form-control">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="password">Password:</label>
+      <div class="col-sm-10">
+        <input type="password" name="password" id="password" class="form-control">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="lastName">Last name:</label>
+      <div class="col-sm-10">
+        <input type="text" name="lastName" id="lastName" class="form-control">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="address">Address:</label>
+      <div class="col-sm-10">
+        <input type="text" name="address" id="address" class="form-control">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <div class="checkbox">
+          <label><input type="checkbox" name="category" value="carrier" id='cb'
+                        onchange="showOrHide('cb', 'crrInfo');">Are you carrier?</label>
+        </div>
+      </div>
+    </div>
+    <div id ='crrInfo' style="display: none;">
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="tariff">Tariff:</label>
+        <div class="col-sm-10">
+          <input type="text" name="tariff" id="tariff" class="form-control">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="info">Additional information:</label>
+        <div class="col-sm-10">
+          <textarea name="info" form="usrform" id="info" class="form-control" rows="5"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <button type="submit" value="Register" class="btn btn-default">Submit</button>
+      </div>
+    </div>
+  </form>
+  <br>
+  <p>If you are registered user, please <a href="login.html">login.</a></p>
+</div>
+</body>
+</html>
