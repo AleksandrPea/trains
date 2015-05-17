@@ -5,7 +5,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import users.db.dao.GenericDao;
-import users.db.dao.Identified;
+import users.db.entities.Identified;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,8 +1,5 @@
 package users.db.entities;
 
-
-import users.db.dao.Identified;
-
 import java.util.Date;
 
 /**

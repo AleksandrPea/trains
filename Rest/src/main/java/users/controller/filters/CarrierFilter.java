@@ -12,7 +12,7 @@ import java.io.IOException;
  *
  * @author Горох Олександр Сергійович, гр. ІО-31, ФІОТ, НТУУ КПІ
  */
-public class CarrierAuthenticationFilter implements Filter {
+public class CarrierFilter implements Filter {
 
     public void init(FilterConfig fConfig) throws ServletException {}
 

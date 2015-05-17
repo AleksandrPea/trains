@@ -7,7 +7,7 @@ import org.junit.Before;
 import org.junit.runners.Parameterized;
 import users.db.dao.DaoFactory;
 import users.db.dao.GenericDao;
-import users.db.dao.Identified;
+import users.db.entities.Identified;
 import users.db.dao.PersistException;
 import users.db.entities.Carrier;
 import users.db.entities.Category;

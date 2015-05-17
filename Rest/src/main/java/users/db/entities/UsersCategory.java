@@ -1,6 +1,5 @@
 package users.db.entities;
 
-import users.db.dao.Identified;
 import users.util.Pair;
 
 /**

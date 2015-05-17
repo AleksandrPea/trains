@@ -1,5 +1,7 @@
 package users.db.dao;
 
+import users.db.entities.Identified;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

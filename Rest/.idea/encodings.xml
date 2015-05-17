@@ -5,10 +5,10 @@
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/dao/AbstractJDBCDao.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/dao/DaoFactory.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/dao/GenericDao.java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/main/java/users/db/dao/Identified.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/dao/PersistException.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/entities/Carrier.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/entities/Category.java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java/users/db/entities/Identified.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/entities/User.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/entities/UsersCategory.java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java/users/db/mysql/MySqlCarrierDao.java" charset="UTF-8" />

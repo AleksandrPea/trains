@@ -1,5 +1,7 @@
 package users.db.dao;
 
+import users.db.entities.Identified;
+
 import java.io.Serializable;
 import java.util.List;
 

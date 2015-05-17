@@ -32,8 +32,8 @@
         <filter-class>users.controller.filters.AuthenticationFilter</filter-class>
     </filter>
     <filter>
-        <filter-name>CarrierAuthenticationFilter</filter-name>
-        <filter-class>users.controller.filters.CarrierAuthenticationFilter</filter-class>
+        <filter-name>CarrierFilter</filter-name>
+        <filter-class>users.controller.filters.CarrierFilter</filter-class>
     </filter>
 
     <filter-mapping>
@@ -42,7 +42,7 @@
     </filter-mapping>
 
     <filter-mapping>
-        <filter-name>CarrierAuthenticationFilter</filter-name>
+        <filter-name>CarrierFilter</filter-name>
         <url-pattern>/carrier/*</url-pattern>
     </filter-mapping>
 

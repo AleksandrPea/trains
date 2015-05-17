@@ -1,7 +1,5 @@
 package users.db.entities;
 
-import users.db.dao.Identified;
-
 /**
  * Об'єктне представлення сутності "Категорія".
  *

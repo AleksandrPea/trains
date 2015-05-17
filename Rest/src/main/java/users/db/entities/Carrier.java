@@ -1,7 +1,6 @@
 package users.db.entities;
 
 import ORMroad.Station;
-import users.db.dao.Identified;
 
 import java.util.List;
 
